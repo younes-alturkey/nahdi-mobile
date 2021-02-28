@@ -45,11 +45,12 @@ class ProductCard extends Component {
 
     const item = this.props.item;
     const imageUrl = 'https://' + item.image_url.substring(2, item.image_url.length);
-    
+    const url = item.url;
+
     return (
       <TouchableOpacity
         activeOpacity={0.6}
-        onPress={() => {navigation.navigate('ProductDescriptionPage', {sku: item.sku, name: item.name, imageUrl: imageUrl})}}
+        onPress={() => {navigation.navigate('ProductDescriptionPage', {sku: item.sku, name: item.name, imageUrl: imageUrl, url: url})}}
       >
         <Card containerStyle={styles.card}>
           <Card.Title

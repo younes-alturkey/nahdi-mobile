@@ -27,21 +27,21 @@ class ProductDescriptionPage extends React.Component {
     super(props);
     this.state = {
       visible: false,
-      webViewUrl: 'https://www.nahdionline.com/en/',
+      webViewUrl: '',
       sku: this.props.route.params.sku,
       imageUrl: this.props.route.params.imageUrl,
+      key_url: this.props.route.params.url,
       productData: {},
-      filtered: false,
     };
   }
 
-  fetchProducts = async () => {
+  fetchProducts = async sku => {
     await fetch(
-      `https://mcstaging.nahdionline.com/en/rest/V1/products/${this.state.sku}`,
+      `https://mcstaging.nahdionline.com/en/rest/V1/products/${sku}`,
       {
         headers: {
           Accept: 'application/json',
-          Authorization: 'Bearer ' + 'o4bbb7sts9ek9bd22g3l3cj16on22bww',
+          Authorization: 'Bearer ' + 'kyxpz69k3ud0bu5lndab7t4z24rcevvk',
         },
       }
     )
@@ -58,6 +58,7 @@ class ProductDescriptionPage extends React.Component {
             dc_only: '',
             safety_stock_level: '',
             alternative_product: '',
+            relatedProducts: [],
             nahdi_rewards_factor: 0,
             updated_at: '',
           };
@@ -95,25 +96,106 @@ class ProductDescriptionPage extends React.Component {
             return;
           });
 
-          this.setState({
-            productData: {
-              name: jsonResponse.name,
-              price: jsonResponse.price,
-              sku: jsonResponse.sku,
-              status: jsonResponse.status,
-              updated_at: jsonResponse.updated_at,
-              description: customAttributes.description,
-              image: customAttributes.image,
-              url_key: customAttributes.url_key,
-              gift_wrapping_available: customAttributes.gift_wrapping_available,
-              manufacturer: customAttributes.manufacturer,
-              is_returnable: customAttributes.is_returnable,
-              dc_only: customAttributes.dc_only,
-              safety_stock_level: customAttributes.safety_stock_level,
-              alternative_product: customAttributes.alternative_product,
-              nahdi_rewards_factor: customAttributes.nahdi_rewards_factor,
-            },
-          });
+          let arAlternativeProducts = customAttributes.alternative_product.split(
+            ','
+          );
+
+          //Limiting related products to only two
+          if (arAlternativeProducts.length > 2)
+            arAlternativeProducts = arAlternativeProducts.slice(0, 2);
+
+          if (arAlternativeProducts[0] === '') arAlternativeProducts = null;
+
+          if (arAlternativeProducts !== null) {
+            if (arAlternativeProducts[1] === '')
+              arAlternativeProducts = arAlternativeProducts.slice(0, 1);
+
+            console.log(`Related ${jsonResponse.sku} SKUs`);
+            console.log(arAlternativeProducts);
+
+            for (let i = 0; i < arAlternativeProducts.length; i++) {
+              fetch(
+                `https://mcstaging.nahdionline.com/en/rest/V1/products/${arAlternativeProducts[i]}`,
+                {
+                  headers: {
+                    Accept: 'application/json',
+                    Authorization:
+                      'Bearer ' + 'kyxpz69k3ud0bu5lndab7t4z24rcevvk',
+                  },
+                }
+              )
+                .then(response => response.json())
+                .then(jsonRelatedResponse => {
+                  let customAlternativeAttributes = {
+                    name: '',
+                    price: '',
+                    image: '',
+                    url_key: '',
+                  };
+
+                  jsonRelatedResponse.custom_attributes.filter(function(item) {
+                    if (item.attribute_code === 'image')
+                      customAlternativeAttributes.image = item.value;
+
+                    if (item.attribute_code === 'url_key')
+                      customAlternativeAttributes.url_key = item.value;
+                    return;
+                  });
+
+                  customAttributes.relatedProducts.push({
+                    name: jsonRelatedResponse.name,
+                    price: jsonRelatedResponse.price,
+                    image: customAlternativeAttributes.image,
+                    url_key: customAlternativeAttributes.url_key,
+                  });
+
+                  this.setState({
+                    productData: {
+                      name: jsonResponse.name,
+                      price: jsonResponse.price,
+                      sku: jsonResponse.sku,
+                      status: jsonResponse.status,
+                      updated_at: jsonResponse.updated_at,
+                      description: customAttributes.description,
+                      image: customAttributes.image,
+                      url_key: customAttributes.url_key,
+                      gift_wrapping_available:
+                        customAttributes.gift_wrapping_available,
+                      manufacturer: customAttributes.manufacturer,
+                      is_returnable: customAttributes.is_returnable,
+                      dc_only: customAttributes.dc_only,
+                      safety_stock_level: customAttributes.safety_stock_level,
+                      alternative_product: customAttributes.alternative_product,
+                      relatedProducts: customAttributes.relatedProducts,
+                      nahdi_rewards_factor:
+                        customAttributes.nahdi_rewards_factor,
+                    },
+                  });
+                });
+            }
+          } else {
+            this.setState({
+              productData: {
+                name: jsonResponse.name,
+                price: jsonResponse.price,
+                sku: jsonResponse.sku,
+                status: jsonResponse.status,
+                updated_at: jsonResponse.updated_at,
+                description: customAttributes.description,
+                image: customAttributes.image,
+                url_key: customAttributes.url_key,
+                gift_wrapping_available:
+                  customAttributes.gift_wrapping_available,
+                manufacturer: customAttributes.manufacturer,
+                is_returnable: customAttributes.is_returnable,
+                dc_only: customAttributes.dc_only,
+                safety_stock_level: customAttributes.safety_stock_level,
+                alternative_product: customAttributes.alternative_product,
+                relatedProducts: customAttributes.relatedProducts,
+                nahdi_rewards_factor: customAttributes.nahdi_rewards_factor,
+              },
+            });
+          }
         }
       })
       .catch(error => {
@@ -122,7 +204,7 @@ class ProductDescriptionPage extends React.Component {
   };
 
   render() {
-    this.fetchProducts();
+    this.fetchProducts(this.state.sku);
 
     const toggleOverlay = () => {
       this.setState({
@@ -276,9 +358,7 @@ class ProductDescriptionPage extends React.Component {
             <View style={{ width: 50, height: 50, marginHorizontal: 7 }}>
               <TouchableOpacity
                 onPress={() => {
-                  setWebViewUrl(
-                    `https://mcstaging.nahdionline.com/en/${productData.url_key}`
-                  );
+                  setWebViewUrl(this.state.key_url);
                   toggleOverlay();
                 }}
               >
@@ -458,7 +538,7 @@ class ProductDescriptionPage extends React.Component {
                 }}
               />
             </TouchableOpacity>
-            {/* <Text
+            <Text
               style={{
                 textAlign: 'justify',
                 color: '#278585',
@@ -468,106 +548,169 @@ class ProductDescriptionPage extends React.Component {
             >
               Related Products
             </Text>
-            <View>
+            {productData.relatedProducts.length === 2 ? (
               <View>
-                {
-                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <TouchableOpacity
-                      style={{ width: 180 }}
-                      onPress={() => {
-                        setWebViewUrl('https://nahdionline.com');
-                        toggleOverlay();
-                      }}
+                <View>
+                  {
+                    <View
+                      style={{ flexDirection: 'row', alignItems: 'center' }}
                     >
-                      <Card>
-                        <Card.Title
-                          numberOfLines={1}
-                          ellipsizeMode="tail"
-                          style={{
-                            color: '#278585',
-                            fontSize: 10,
-                          }}
-                        >
-                          {'Panadol'}
-                        </Card.Title>
-                        <Card.Divider />
-                        <View
-                          style={{
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                          }}
-                        >
-                          <Image
-                            source={{
-                              uri:
-                                'https://media.glassdoor.com/sqll/930146/nahdi-medical-company-squarelogo-1542203153238.png',
-                            }}
-                            style={{ width: 92, height: 92 }}
-                            resizeMode={'contain'}
-                          />
-                          <Text
+                      <TouchableOpacity
+                        style={{ width: 180 }}
+                        onPress={() => {
+                          setWebViewUrl(`https://mcstaging.nahdionline.com/en/${productData.relatedProducts[0].url_key}`);
+                          toggleOverlay();
+                        }}
+                      >
+                        <Card>
+                          <Card.Title
+                            numberOfLines={1}
+                            ellipsizeMode="tail"
                             style={{
-                              textAlign: 'center',
+                              color: '#278585',
                               fontSize: 10,
-                              paddingVertical: 10,
-                              color: '#90A4AE',
                             }}
                           >
-                            {22} SAR
-                          </Text>
-                        </View>
-                      </Card>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={{ width: 180 }}
-                      onPress={() => {
-                        setWebViewUrl('https://nahdionline.com');
-                        toggleOverlay();
-                      }}
-                    >
-                      <Card>
-                        <Card.Title
-                          numberOfLines={1}
-                          ellipsizeMode="tail"
-                          style={{
-                            color: '#278585',
-                            fontSize: 10,
-                          }}
-                        >
-                          {'Panadol'}
-                        </Card.Title>
-                        <Card.Divider />
-                        <View
-                          style={{
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                          }}
-                        >
-                          <Image
-                            source={{
-                              uri:
-                                'https://media.glassdoor.com/sqll/930146/nahdi-medical-company-squarelogo-1542203153238.png',
-                            }}
-                            style={{ width: 92, height: 92 }}
-                            resizeMode={'contain'}
-                          />
-                          <Text
+                            {productData.relatedProducts[0].name}
+                          </Card.Title>
+                          <Card.Divider />
+                          <View
                             style={{
-                              textAlign: 'center',
-                              fontSize: 10,
-                              paddingVertical: 10,
-                              color: '#90A4AE',
+                              justifyContent: 'center',
+                              alignItems: 'center',
                             }}
                           >
-                            {44} SAR
-                          </Text>
-                        </View>
-                      </Card>
-                    </TouchableOpacity>
-                  </View>
-                }
+                            <Image
+                              source={{
+                                uri:
+                                  `https://nahdionline.com/media/catalog/product${productData.relatedProducts[0].image}`,
+                              }}
+                              style={{ width: 92, height: 92 }}
+                              resizeMode={'contain'}
+                            />
+                            <Text
+                              style={{
+                                textAlign: 'center',
+                                fontSize: 12,
+                                paddingVertical: 15,
+                                color: '#90A4AE',
+                              }}
+                            >
+                              {productData.relatedProducts[0].price} SAR
+                            </Text>
+                          </View>
+                        </Card>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={{ width: 180 }}
+                        onPress={() => {
+                          setWebViewUrl(`https://mcstaging.nahdionline.com/en/${productData.relatedProducts[1].url_key}`);
+                          toggleOverlay();
+                        }}
+                      >
+                        <Card>
+                          <Card.Title
+                            numberOfLines={1}
+                            ellipsizeMode="tail"
+                            style={{
+                              color: '#278585',
+                              fontSize: 10,
+                            }}
+                          >
+                            {productData.relatedProducts[1].name}
+                          </Card.Title>
+                          <Card.Divider />
+                          <View
+                            style={{
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                            }}
+                          >
+                            <Image
+                              source={{
+                                uri:
+                                `https://nahdionline.com/media/catalog/product${productData.relatedProducts[1].image}`,
+                              }}
+                              style={{ width: 92, height: 92 }}
+                              resizeMode={'contain'}
+                            />
+                            <Text
+                              style={{
+                                textAlign: 'center',
+                                fontSize: 12,
+                                paddingVertical: 15,
+                                color: '#90A4AE',
+                              }}
+                            >
+                              {productData.relatedProducts[1].price} SAR
+                            </Text>
+                          </View>
+                        </Card>
+                      </TouchableOpacity>
+                    </View>
+                  }
+                </View>
               </View>
-            </View> */}
+            ) : productData.relatedProducts.length === 1 ? (
+              <TouchableOpacity
+                style={{ width: 180 }}
+                onPress={() => {
+                  setWebViewUrl(`https://mcstaging.nahdionline.com/en/${productData.relatedProducts[0].url_key}`);
+                  toggleOverlay();
+                }}
+              >
+                <Card>
+                  <Card.Title
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                    style={{
+                      color: '#278585',
+                      fontSize: 10,
+                    }}
+                  >
+                    {productData.relatedProducts[0].name}
+                  </Card.Title>
+                  <Card.Divider />
+                  <View
+                    style={{
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Image
+                      source={{
+                        uri:
+                        `https://nahdionline.com/media/catalog/product${productData.relatedProducts[0].image}`,
+                      }}
+                      style={{ width: 92, height: 92 }}
+                      resizeMode={'contain'}
+                    />
+                    <Text
+                      style={{
+                        textAlign: 'center',
+                        fontSize: 12,
+                        paddingVertical: 15,
+                        color: '#90A4AE',
+                      }}
+                    >
+                      {productData.relatedProducts[0].price} SAR
+                    </Text>
+                  </View>
+                </Card>
+              </TouchableOpacity>
+            ) : (
+              <Text
+                style={{
+                  textAlign: 'justify',
+                  color: '#90A4AE',
+                  fontSize: 12,
+                  paddingVertical: 20,
+                  paddingHorizontal: 5
+                }}
+              >
+                No related products found.
+              </Text>
+            )}
           </View>
           <View style={{ paddingBottom: 30 }} />
         </ScrollView>
