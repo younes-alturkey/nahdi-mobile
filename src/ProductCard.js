@@ -7,7 +7,7 @@ import {
   TouchableHighlight,
   Dimensions,
 } from 'react-native';
-
+import Toast from 'react-native-toast-message';
 import { Icon, Card } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 
@@ -140,14 +140,25 @@ class ProductCard extends Component {
             underlayColor="#90A4AE"
             activeOpacity={0.6}
             onPress={() => {
-              //   item["orderQuantity"] = this.state.quantity;
-              //   this.props.cart.count =
-              //   this.props.cart.count + this.state.quantity;
-              //   this.props.cartList.push(item);
-              //   this.setState({ quantity: 1 });
-              this.setQty((this.props.cart.qty + this.state.quantity));
+              this.setQty(this.state.quantity);
+              this.props.cart.products.push({
+                sku: item.sku,
+                name: item.name,
+                price: item.price.SAR.default_formated,
+                imageUrl: imageUrl,
+                url: url,
+                qty: this.state.quantity
+              });
+              Toast.show({
+                text1: "Success",
+                text2: `x${this.state.quantity} ${item.name.substring(0,15)}... has been added to your cart.`,
+                visibilityTime: 1500,
+                position: "bottom",
+                bottomOffset: 60,
+              });
               this.resetQuantity()
-              this.forceUpdate()
+              console.log(this.props.cart)
+              navigation.navigate('ProductListPage');
             }}
             style={{ backgroundColor: '#278585' }}
           >

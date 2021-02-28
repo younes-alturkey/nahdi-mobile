@@ -18,7 +18,7 @@ import {
 
 import { Icon, Overlay, Card } from 'react-native-elements';
 import 'react-native-gesture-handler';
-import Toast, { BaseToast } from 'react-native-toast-message';
+import Toast from 'react-native-toast-message';
 import { WebView } from 'react-native-webview';
 import { Rating } from 'react-native-ratings';
 
@@ -36,17 +36,32 @@ class ProductDescriptionPage extends React.Component {
   }
 
   fetchProducts = async sku => {
+    const authToken = 'nmgvsmktxwe3tvwfvrj9onxwwb3jb7mb';
+    
     await fetch(
       `https://mcstaging.nahdionline.com/en/rest/V1/products/${sku}`,
       {
         headers: {
           Accept: 'application/json',
-          Authorization: 'Bearer ' + '5q3e4j4y8uue11kkax14m3axz4ugj1x1',
+          Authorization: 'Bearer ' + authToken,
         },
       }
     )
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) return undefined;
+        return response.json();
+      })
       .then(jsonResponse => {
+        if (!jsonResponse) {
+          Toast.show({
+            text1: "Data Fetch Failed",
+            text2: "Something went wrong.",
+            visibilityTime: 3000,
+            position: "bottom",
+            bottomOffset: 60,
+          });
+          return;
+        }
         if (!this.state.productData.name) {
           let customAttributes = {
             description: '',
@@ -120,7 +135,7 @@ class ProductDescriptionPage extends React.Component {
                   headers: {
                     Accept: 'application/json',
                     Authorization:
-                      'Bearer ' + '5q3e4j4y8uue11kkax14m3axz4ugj1x1',
+                      'Bearer ' + authToken,
                   },
                 }
               )
@@ -246,7 +261,8 @@ class ProductDescriptionPage extends React.Component {
     if (!productData.name)
       return (
         <View style={styles.loading}>
-          <ActivityIndicator size="large" color="#278585" />
+          {/* <ActivityIndicator size="large" color="#278585" /> */}
+          <Image style={{width: 44, height: 44}} source={require('../assets/images/nahdi-loading.gif')} />
         </View>
       );
 
@@ -558,7 +574,9 @@ class ProductDescriptionPage extends React.Component {
                       <TouchableOpacity
                         style={{ width: 180 }}
                         onPress={() => {
-                          setWebViewUrl(`https://mcstaging.nahdionline.com/en/${productData.relatedProducts[0].url_key}`);
+                          setWebViewUrl(
+                            `https://mcstaging.nahdionline.com/en/${productData.relatedProducts[0].url_key}`
+                          );
                           toggleOverlay();
                         }}
                       >
@@ -582,8 +600,7 @@ class ProductDescriptionPage extends React.Component {
                           >
                             <Image
                               source={{
-                                uri:
-                                  `https://nahdionline.com/media/catalog/product${productData.relatedProducts[0].image}`,
+                                uri: `https://nahdionline.com/media/catalog/product${productData.relatedProducts[0].image}`,
                               }}
                               style={{ width: 92, height: 92 }}
                               resizeMode={'contain'}
@@ -604,7 +621,9 @@ class ProductDescriptionPage extends React.Component {
                       <TouchableOpacity
                         style={{ width: 180 }}
                         onPress={() => {
-                          setWebViewUrl(`https://mcstaging.nahdionline.com/en/${productData.relatedProducts[1].url_key}`);
+                          setWebViewUrl(
+                            `https://mcstaging.nahdionline.com/en/${productData.relatedProducts[1].url_key}`
+                          );
                           toggleOverlay();
                         }}
                       >
@@ -628,8 +647,7 @@ class ProductDescriptionPage extends React.Component {
                           >
                             <Image
                               source={{
-                                uri:
-                                `https://nahdionline.com/media/catalog/product${productData.relatedProducts[1].image}`,
+                                uri: `https://nahdionline.com/media/catalog/product${productData.relatedProducts[1].image}`,
                               }}
                               style={{ width: 92, height: 92 }}
                               resizeMode={'contain'}
@@ -655,7 +673,9 @@ class ProductDescriptionPage extends React.Component {
               <TouchableOpacity
                 style={{ width: 180 }}
                 onPress={() => {
-                  setWebViewUrl(`https://mcstaging.nahdionline.com/en/${productData.relatedProducts[0].url_key}`);
+                  setWebViewUrl(
+                    `https://mcstaging.nahdionline.com/en/${productData.relatedProducts[0].url_key}`
+                  );
                   toggleOverlay();
                 }}
               >
@@ -679,8 +699,7 @@ class ProductDescriptionPage extends React.Component {
                   >
                     <Image
                       source={{
-                        uri:
-                        `https://nahdionline.com/media/catalog/product${productData.relatedProducts[0].image}`,
+                        uri: `https://nahdionline.com/media/catalog/product${productData.relatedProducts[0].image}`,
                       }}
                       style={{ width: 92, height: 92 }}
                       resizeMode={'contain'}
@@ -705,7 +724,7 @@ class ProductDescriptionPage extends React.Component {
                   color: '#90A4AE',
                   fontSize: 12,
                   paddingVertical: 20,
-                  paddingHorizontal: 5
+                  paddingHorizontal: 5,
                 }}
               >
                 No related products found.

@@ -30,8 +30,6 @@ class ProductListPage extends React.Component {
     };
 
     render() {
-        //this.props.route.params.keywords;
-
         return (
             <SafeAreaView style={styles.safe}>
                 <View style={styles.container}>
