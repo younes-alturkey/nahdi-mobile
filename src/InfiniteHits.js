@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import ProductCard from './ProductCard';
 
-const InfiniteHits = ({ hits, hasMore, refine }) => {
+const InfiniteHits = ({ hits, hasMore, refine, cart }) => {
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -16,7 +16,7 @@ const InfiniteHits = ({ hits, hasMore, refine }) => {
         ItemSeparatorComponent={() => <View style={styles.separator} />}
         onEndReached={() => hasMore && refine()}
         renderItem={({ item }) => (
-          <ProductCard item={item} />
+          <ProductCard item={item} cart={cart} />
         )}
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}

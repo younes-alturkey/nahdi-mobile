@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,17 +7,18 @@ import {
   TouchableOpacity,
   Dimensions,
   LogBox,
-} from "react-native";
-import { Icon } from "react-native-elements";
+} from 'react-native';
+import { Icon } from 'react-native-elements';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import Toast, { BaseToast } from "react-native-toast-message";
+import Toast, { BaseToast } from 'react-native-toast-message';
 import ProductListPage from './src/ProductListPage';
 import ProductDescriptionPage from './src/ProductDescriptionPage';
 import HomeScreen from './src/HomeScreen';
 import SearchHeader from './src/SearchHeader';
+import CartIcon from './src/CartIcon';
 
-LogBox.ignoreLogs(["Setting a timer"]);
+LogBox.ignoreLogs(['Setting a timer']);
 
 const Stack = createStackNavigator();
 
@@ -25,169 +26,89 @@ const toastConfig = {
   success: ({ text1, text2, ...rest }) => (
     <BaseToast
       {...rest}
-      style={{ borderLeftColor: "#278585" }}
+      style={{ borderLeftColor: '#278585' }}
       contentContainerStyle={{ paddingHorizontal: 15 }}
       text1Style={{
         fontSize: 14,
-        color: "#278585",
+        color: '#278585',
       }}
       text1={text1}
       text2={text2}
-      leadingIcon={require("./assets/images/icon.png")}
+      leadingIcon={require('./assets/images/icon.png')}
     />
   ),
 };
+
+let cart = {
+  qty: 0,
+  products: [],
+};
+
+const PLP = () => {
+  return <ProductListPage cart={cart} />
+}
 
 class App extends React.Component {
   render() {
     return (
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name="HomeScreen" component={HomeScreen}
+          <Stack.Screen
+            name="HomeScreen"
+            component={HomeScreen}
             options={{
-              headerTitleStyle: {
-              },
+              headerTitleStyle: {},
               headerStyle: {
-                backgroundColor: "#278585",
+                backgroundColor: '#278585',
               },
-              headerTintColor: "#fff",
-              headerRight: () => (
-                <TouchableOpacity>
-                  <View
-                    style={{ alignItems: "center", justifyContent: "center" }}
-                  >
-                    <Text
-                      style={{
-                        alignItems: "center",
-                        justifyContent: "center",
-                        fontSize: 10,
-                        textAlign: "center",
-                        color: "#fff",
-                        backgroundColor: "#ff6900",
-                        width: 15,
-                        height: 15,
-                        borderRadius: 15 / 2,
-                      }}
-                    >
-                      {1}
-                    </Text>
-                    <View>
-                      <Icon
-                        name="shopping-basket"
-                        type="font-awesome"
-                        color="#fff"
-                        size={23}
-                        style={{ paddingRight: 15, paddingBottom: 20 }}
-                      />
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              ),
+              headerTintColor: '#fff',
+              headerRight: () => <CartIcon cart={cart} />,
               headerLeft: () => (
                 <TouchableOpacity>
                   <Image
                     style={{ width: 30, height: 30, marginLeft: 15 }}
-                    source={require("./assets/images/icon.png")}
+                    source={require('./assets/images/icon.png')}
                   />
                 </TouchableOpacity>
               ),
-              headerTitle: () => (
-                <SearchHeader />
-              )
-            }} />
-          <Stack.Screen name="ProductListPage" component={ProductListPage}
-            options={{
+              headerTitle: () => <SearchHeader />,
+            }}
+          />
+          <Stack.Screen
+            name="ProductListPage"
+            component={PLP}
+            options={({ route }) => ({
               title: 'Search Nahdi Products',
-              headerTitleStyle: {
-              },
+              headerTintColor: '#278585',
+              headerTitleStyle: {},
               headerStyle: {
-                backgroundColor: "#278585",
+                backgroundColor: '#278585',
               },
-              headerTintColor: "#fff",
-              headerRight: () => (
-                <TouchableOpacity>
-                  <View
-                    style={{ alignItems: "center", justifyContent: "center" }}
-                  >
-                    <Text
-                      style={{
-                        alignItems: "center",
-                        justifyContent: "center",
-                        fontSize: 10,
-                        textAlign: "center",
-                        color: "#fff",
-                        backgroundColor: "#ff6900",
-                        width: 15,
-                        height: 15,
-                        borderRadius: 15 / 2,
-                      }}
-                    >
-                      {1}
-                    </Text>
-                    <View>
-                      <Icon
-                        name="shopping-basket"
-                        type="font-awesome"
-                        color="#fff"
-                        size={23}
-                        style={{ paddingRight: 15, paddingBottom: 20 }}
-                      />
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              ),
-            }} />
+              headerTintColor: '#fff',
+              headerRight: () => <CartIcon cart={cart} />,
+            })}
+          />
 
-          <Stack.Screen name="ProductDescriptionPage" component={ProductDescriptionPage} options={({ route }) => ({
-            title: route.params.name,
-            headerTintColor: "#278585",
-            headerTitleStyle: {
-            },
-            headerStyle: {
-              backgroundColor: "#278585",
-            },
-            headerTintColor: "#fff",
-            headerRight: () => (
-              <TouchableOpacity>
-                <View
-                  style={{ alignItems: "center", justifyContent: "center" }}
-                >
-                  <Text
-                    style={{
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontSize: 10,
-                      textAlign: "center",
-                      color: "#fff",
-                      backgroundColor: "#ff6900",
-                      width: 15,
-                      height: 15,
-                      borderRadius: 15 / 2,
-                    }}
-                  >
-                    {1}
-                  </Text>
-                  <View>
-                    <Icon
-                      name="shopping-basket"
-                      type="font-awesome"
-                      color="#fff"
-                      size={25}
-                      style={{ paddingRight: 15, paddingBottom: 3 }}
-                    />
-                  </View>
-                </View>
-              </TouchableOpacity>
-            ),
-          })}
+          <Stack.Screen
+            name="ProductDescriptionPage"
+            component={ProductDescriptionPage}
+            options={({ route }) => ({
+              title: route.params.name,
+              headerTintColor: '#278585',
+              headerTitleStyle: {},
+              headerStyle: {
+                backgroundColor: '#278585',
+              },
+              headerTintColor: '#fff',
+              headerRight: () => <CartIcon cart={cart} />,
+            })}
           />
         </Stack.Navigator>
-        <Toast config={toastConfig} ref={(ref) => Toast.setRef(ref)} />
+        <Toast config={toastConfig} ref={ref => Toast.setRef(ref)} />
       </NavigationContainer>
-    )
+    );
   }
 }
-
 
 const styles = StyleSheet.create({
   searchSection: {
@@ -198,7 +119,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     height: 40,
     width: 280,
-    borderRadius: 20
+    borderRadius: 20,
   },
   searchIcon: {
     padding: 10,
@@ -218,42 +139,42 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   list: {
-    justifyContent: "space-around",
+    justifyContent: 'space-around',
     paddingBottom: 350,
   },
   column: {
     flexShrink: 1,
   },
   card: {
-    width: (Dimensions.get("window").width - 4 * 10) / 2,
+    width: (Dimensions.get('window').width - 4 * 10) / 2,
     margin: 10,
   },
   text: {
     fontSize: 18,
-    color: "#fff",
+    color: '#fff',
   },
   iconcontainer: {
     paddingRight: 15,
   },
   searchcontainer: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
   },
   searchinput: {
-    color: "#278585",
+    color: '#278585',
   },
   loading: {
-    position: "absolute",
+    position: 'absolute',
     left: 0,
     right: 0,
     top: 0,
     bottom: 0,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

@@ -41,7 +41,7 @@ class ProductDescriptionPage extends React.Component {
       {
         headers: {
           Accept: 'application/json',
-          Authorization: 'Bearer ' + 'kyxpz69k3ud0bu5lndab7t4z24rcevvk',
+          Authorization: 'Bearer ' + '5q3e4j4y8uue11kkax14m3axz4ugj1x1',
         },
       }
     )
@@ -120,7 +120,7 @@ class ProductDescriptionPage extends React.Component {
                   headers: {
                     Accept: 'application/json',
                     Authorization:
-                      'Bearer ' + 'kyxpz69k3ud0bu5lndab7t4z24rcevvk',
+                      'Bearer ' + '5q3e4j4y8uue11kkax14m3axz4ugj1x1',
                   },
                 }
               )

@@ -45,7 +45,7 @@ class ProductListPage extends React.Component {
                         <Configure
                             hitsPerPage={2}
                         />
-                        <InfiniteHits />
+                        <InfiniteHits cart={this.props.cart} />
                     </InstantSearch>
                 </View>
             </SafeAreaView>
