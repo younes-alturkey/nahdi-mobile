@@ -20,7 +20,7 @@ class CartIcon extends React.Component {
     // Get it from props
     const { navigation } = this.props;
     return (
-      <TouchableOpacity onPress={() => this.setQty(1)}>
+      <TouchableOpacity onPress={() => navigation.navigate('CartView')}>
         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
           <Text
             style={{

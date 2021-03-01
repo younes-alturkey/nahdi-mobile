@@ -61,6 +61,7 @@ class ProductCard extends Component {
             name: item.name,
             imageUrl: imageUrl,
             url: url,
+            cart: this.props.cart,
           });
         }}
       >
@@ -147,17 +148,19 @@ class ProductCard extends Component {
                 price: item.price.SAR.default_formated,
                 imageUrl: imageUrl,
                 url: url,
-                qty: this.state.quantity
+                qty: this.state.quantity,
               });
               Toast.show({
-                text1: "Success",
-                text2: `x${this.state.quantity} ${item.name.substring(0,15)}... has been added to your cart.`,
+                text1: 'Success',
+                text2: `x${this.state.quantity} ${item.name.substring(
+                  0,
+                  15
+                )}... has been added to your cart.`,
                 visibilityTime: 1500,
-                position: "bottom",
+                position: 'bottom',
                 bottomOffset: 60,
               });
-              this.resetQuantity()
-              console.log(this.props.cart)
+              this.resetQuantity();
               navigation.navigate('ProductListPage');
             }}
             style={{ backgroundColor: '#278585' }}

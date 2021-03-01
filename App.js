@@ -6,9 +6,9 @@ import {
   Image,
   TouchableOpacity,
   Dimensions,
+  Icon,
   LogBox,
 } from 'react-native';
-import { Icon } from 'react-native-elements';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Toast, { BaseToast } from 'react-native-toast-message';
@@ -17,6 +17,8 @@ import ProductDescriptionPage from './src/ProductDescriptionPage';
 import HomeScreen from './src/HomeScreen';
 import SearchHeader from './src/SearchHeader';
 import CartIcon from './src/CartIcon';
+import CartScreen from './src/CartScreen';
+import SearchIcon from './src/SearchIcon';
 
 LogBox.ignoreLogs(['Setting a timer']);
 
@@ -45,8 +47,16 @@ let cart = {
 };
 
 const PLP = () => {
-  return <ProductListPage cart={cart} />
-}
+  return <ProductListPage cart={cart} />;
+};
+
+// const PDP = () => {
+//   return <ProductDescriptionPage />
+// }
+
+const CartView = () => {
+  return <CartScreen cart={cart} />;
+};
 
 class App extends React.Component {
   render() {
@@ -103,6 +113,40 @@ class App extends React.Component {
               headerRight: () => <CartIcon cart={cart} />,
             })}
           />
+          <Stack.Screen
+            name="CartView"
+            component={CartView}
+            options={({ route }) => ({
+              title: 'My Cart',
+              headerTintColor: '#278585',
+              headerTitleStyle: {},
+              headerStyle: {
+                backgroundColor: '#278585',
+              },
+              headerTintColor: '#fff',
+              headerRight: () => <SearchIcon />,
+            })}
+          />
+          {/* <Stack.Screen
+            name="CartScreen"
+            component={CartView}
+            options={({ }) => ({
+              title: 'My Cart',
+              headerTintColor: '#278585',
+              headerTitleStyle: {},
+              headerStyle: {
+                backgroundColor: '#278585',
+              },
+              headerTintColor: '#fff',
+              headerRight: () => (
+                <View>
+                  <TouchableOpacity>
+                    <Icon name="search" type="font-awesome" color="#90A4AE" />
+                  </TouchableOpacity>
+                </View>
+              ),
+            })}
+          /> */}
         </Stack.Navigator>
         <Toast config={toastConfig} ref={ref => Toast.setRef(ref)} />
       </NavigationContainer>

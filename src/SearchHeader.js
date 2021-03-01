@@ -2,19 +2,13 @@ import React from "react";
 import {
   View,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   TextInput,
-  SafeAreaView,
-  ActivityIndicator,
   StyleSheet
 } from "react-native";
 import { Icon, Overlay } from "react-native-elements";
 import Toast from "react-native-toast-message";
 import { useNavigation } from '@react-navigation/native';
 import algoliasearch from 'algoliasearch/reactnative';
-import SearchBox from './SearchBox';
-import InfiniteHits from './InfiniteHits';
-import { InstantSearch } from 'react-instantsearch-native';
 
 const searchClient = algoliasearch(
   'H9X4IH7M99',

@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   StyleSheet,
   Text,
   View,
-  Button,
   Image,
   TouchableOpacity,
   TouchableHighlight,
@@ -15,7 +14,7 @@ import {
   LogBox,
   ActivityIndicator,
 } from 'react-native';
-
+import { useNavigation } from '@react-navigation/native';
 import { Icon, Overlay, Card } from 'react-native-elements';
 import 'react-native-gesture-handler';
 import Toast from 'react-native-toast-message';
@@ -27,6 +26,7 @@ class ProductDescriptionPage extends React.Component {
     super(props);
     this.state = {
       visible: false,
+      quantity: 1,
       webViewUrl: '',
       sku: this.props.route.params.sku,
       imageUrl: this.props.route.params.imageUrl,
@@ -36,8 +36,8 @@ class ProductDescriptionPage extends React.Component {
   }
 
   fetchProducts = async sku => {
-    const authToken = 'nmgvsmktxwe3tvwfvrj9onxwwb3jb7mb';
-    
+    const authToken = 'f82t13yacb8aj7u8ml4601e4d05zqmp5';
+
     await fetch(
       `https://mcstaging.nahdionline.com/en/rest/V1/products/${sku}`,
       {
@@ -54,10 +54,10 @@ class ProductDescriptionPage extends React.Component {
       .then(jsonResponse => {
         if (!jsonResponse) {
           Toast.show({
-            text1: "Data Fetch Failed",
-            text2: "Something went wrong.",
+            text1: 'Data Fetch Failed',
+            text2: 'Something went wrong.',
             visibilityTime: 3000,
-            position: "bottom",
+            position: 'bottom',
             bottomOffset: 60,
           });
           return;
@@ -125,8 +125,8 @@ class ProductDescriptionPage extends React.Component {
             if (arAlternativeProducts[1] === '')
               arAlternativeProducts = arAlternativeProducts.slice(0, 1);
 
-            console.log(`Related ${jsonResponse.sku} SKUs`);
-            console.log(arAlternativeProducts);
+            // console.log(`Related ${jsonResponse.sku} SKUs`);
+            // console.log(arAlternativeProducts);
 
             for (let i = 0; i < arAlternativeProducts.length; i++) {
               fetch(
@@ -134,8 +134,7 @@ class ProductDescriptionPage extends React.Component {
                 {
                   headers: {
                     Accept: 'application/json',
-                    Authorization:
-                      'Bearer ' + authToken,
+                    Authorization: 'Bearer ' + authToken,
                   },
                 }
               )
@@ -218,7 +217,34 @@ class ProductDescriptionPage extends React.Component {
       });
   };
 
+  setQty = val => {
+    this.props.route.params.cart.qty = this.props.route.params.cart.qty + val;
+    this.forceUpdate();
+  };
+
+  incrementQuantity() {
+    this.setState({
+      quantity: this.state.quantity + 1,
+    });
+  }
+
+  decrementQuantity() {
+    if (this.state.quantity <= 1) this.resetQuantity();
+    else
+      this.setState({
+        quantity: this.state.quantity - 1,
+      });
+  }
+
+  resetQuantity() {
+    this.setState({
+      quantity: 1,
+    });
+  }
+
   render() {
+    const { navigation } = this.props;
+
     this.fetchProducts(this.state.sku);
 
     const toggleOverlay = () => {
@@ -256,13 +282,16 @@ class ProductDescriptionPage extends React.Component {
     }
 
     const productData = this.state.productData;
-    console.log(productData);
+    // console.log(productData);
 
     if (!productData.name)
       return (
         <View style={styles.loading}>
           {/* <ActivityIndicator size="large" color="#278585" /> */}
-          <Image style={{width: 44, height: 44}} source={require('../assets/images/nahdi-loading.gif')} />
+          <Image
+            style={{ width: 44, height: 44 }}
+            source={require('../assets/images/nahdi-loading.gif')}
+          />
         </View>
       );
 
@@ -750,7 +779,7 @@ class ProductDescriptionPage extends React.Component {
               type="font-awesome"
               color="#278585"
               size={20}
-              // onPress={() => setQuantity(quantity - 1)}
+              onPress={this.decrementQuantity.bind(this)}
             />
           </View>
           <View style={{ width: 50, height: 50 }}>
@@ -764,7 +793,7 @@ class ProductDescriptionPage extends React.Component {
                 borderWidth: 1,
               }}
             >
-              1
+              {this.state.quantity}
             </Text>
           </View>
           <View style={{ width: 50, height: 50, marginTop: 10 }}>
@@ -773,7 +802,7 @@ class ProductDescriptionPage extends React.Component {
               type="font-awesome"
               color="#278585"
               size={20}
-              // onPress={() => setQuantity(quantity + 1)}
+              onPress={this.incrementQuantity.bind(this)}
             />
           </View>
         </View>
@@ -781,15 +810,33 @@ class ProductDescriptionPage extends React.Component {
           style={{ width: '100%', backgroundColor: '#278585' }}
           underlayColor="#90A4AE"
           activeOpacity={0.6}
+          onPress={() => {
+            this.setQty(this.state.quantity);
+            this.props.route.params.cart.products.push({
+              sku: this.state.sku,
+              name: productData.name,
+              price: productData.price,
+              imageUrl: this.state.imageUrl,
+              url: this.state.key_url,
+              qty: this.state.quantity,
+            });
+            Toast.show({
+              text1: 'Success',
+              text2: `x${this.state.quantity} ${productData.name.substring(
+                0,
+                15
+              )}... has been added to your cart.`,
+              visibilityTime: 1500,
+              position: 'bottom',
+              bottomOffset: 60,
+            });
+            console.log(this.props.route.params.cart)
+            this.resetQuantity();
+            navigation.navigate('ProductDescriptionPage');
+          }}
         >
           <View style={{ padding: 5 }}>
-            <Icon
-              name="cart-plus"
-              type="font-awesome"
-              color="#fff"
-              size={30}
-              onPress={() => console.log('clicked ')}
-            />
+            <Icon name="cart-plus" type="font-awesome" color="#fff" size={30} />
           </View>
         </TouchableHighlight>
       </SafeAreaView>
@@ -839,4 +886,9 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProductDescriptionPage;
+// Wrap and export
+export default function (props) {
+  const navigation = useNavigation();
+
+  return <ProductDescriptionPage {...props} navigation={navigation} />;
+}
