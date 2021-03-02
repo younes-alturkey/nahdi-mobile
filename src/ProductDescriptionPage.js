@@ -36,7 +36,7 @@ class ProductDescriptionPage extends React.Component {
   }
 
   fetchProducts = async sku => {
-    const authToken = 'f82t13yacb8aj7u8ml4601e4d05zqmp5';
+    const authToken = '415x9takwlk9y449huozwokwie3hl27d';
 
     await fetch(
       `https://mcstaging.nahdionline.com/en/rest/V1/products/${sku}`,
