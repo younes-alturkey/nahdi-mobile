@@ -1,6 +1,32 @@
 {
   "expo": {
-    "name": "nahdi-mobile-rn-algolia",
-    "slug": "nahdi-mobile-rn-algolia"
+    "name": "Nahdi",
+    "slug": "nahdi_mobile",
+    "privacy": "public",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "version": "1.0.5",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "sa.nahdi.mobile"
+    }
   }
 }

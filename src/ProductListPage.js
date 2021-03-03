@@ -41,7 +41,7 @@ class ProductListPage extends React.Component {
                         <SearchBox />
                         <Stats />
                         <Configure
-                            hitsPerPage={2}
+                            hitsPerPage={4}
                         />
                         <InfiniteHits cart={this.props.cart} />
                     </InstantSearch>

@@ -36,7 +36,7 @@ class ProductDescriptionPage extends React.Component {
   }
 
   fetchProducts = async sku => {
-    const authToken = '415x9takwlk9y449huozwokwie3hl27d';
+    const authToken = '0f59x54cvzz3nd7wgdgcku74e5ikb1h4';
 
     await fetch(
       `https://mcstaging.nahdionline.com/en/rest/V1/products/${sku}`,
@@ -376,7 +376,7 @@ class ProductDescriptionPage extends React.Component {
                 onPress={() => {
                   Toast.show({
                     text1: 'Stock Availability',
-                    text2: `There are ${1} units of this product in-stock.`,
+                    text2: `There are ${15487} units of this product in-stock.`,
                     position: 'bottom',
                     bottomOffset: 60,
                   });
@@ -435,7 +435,7 @@ class ProductDescriptionPage extends React.Component {
                 color: '#90A4AE',
               }}
             >
-              {productData.price} SAR
+              {productData.price.toFixed(2)} SAR
             </Text>
             <Text
               style={{
@@ -815,21 +815,13 @@ class ProductDescriptionPage extends React.Component {
             this.props.route.params.cart.products.push({
               sku: this.state.sku,
               name: productData.name,
-              price: productData.price,
+              price: `${productData.price.toFixed(2)} SAR`,
               imageUrl: this.state.imageUrl,
               url: this.state.key_url,
               qty: this.state.quantity,
+              index: this.props.route.params.cart.indices++
             });
-            Toast.show({
-              text1: 'Success',
-              text2: `x${this.state.quantity} ${productData.name.substring(
-                0,
-                15
-              )}... has been added to your cart.`,
-              visibilityTime: 1500,
-              position: 'bottom',
-              bottomOffset: 60,
-            });
+            this.props.route.params.cart.total = this.props.route.params.cart.total + (productData.price * this.state.quantity)
             console.log(this.props.route.params.cart)
             this.resetQuantity();
             navigation.navigate('ProductDescriptionPage');

@@ -149,17 +149,9 @@ class ProductCard extends Component {
                 imageUrl: imageUrl,
                 url: url,
                 qty: this.state.quantity,
+                index: this.props.cart.indices++,
               });
-              Toast.show({
-                text1: 'Success',
-                text2: `x${this.state.quantity} ${item.name.substring(
-                  0,
-                  15
-                )}... has been added to your cart.`,
-                visibilityTime: 1500,
-                position: 'bottom',
-                bottomOffset: 60,
-              });
+              this.props.cart.total = this.props.cart.total + (parseFloat(item.price.SAR.default_formated.replace(/[^0-9, ., ]/g, '').trim()) * this.state.quantity)
               this.resetQuantity();
               navigation.navigate('ProductListPage');
             }}

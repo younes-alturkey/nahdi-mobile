@@ -43,6 +43,8 @@ const toastConfig = {
 
 let cart = {
   qty: 0,
+  indices: 0,
+  total: 0,
   products: [],
 };
 
@@ -74,7 +76,17 @@ class App extends React.Component {
               headerTintColor: '#fff',
               headerRight: () => <CartIcon cart={cart} />,
               headerLeft: () => (
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    Toast.show({
+                      text1: '',
+                      text2: 'There for every beat.',
+                      visibilityTime: 1000,
+                      position: 'bottom',
+                      bottomOffset: 60,
+                    });
+                  }}
+                >
                   <Image
                     style={{ width: 30, height: 30, marginLeft: 15 }}
                     source={require('./assets/images/icon.png')}
