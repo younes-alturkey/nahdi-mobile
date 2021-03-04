@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, TextInput } from 'react-native';
+import { StyleSheet, View, TextInput, Keyboard } from 'react-native';
 import PropTypes from 'prop-types';
 import { connectSearchBox } from 'react-instantsearch-native';
 
@@ -9,7 +9,10 @@ const SearchBox = ({ currentRefinement, refine }) => {
     <View style={styles.container}>
       <TextInput
         style={styles.input}
-        onChangeText={(value) => refine(value)}
+        onChangeText={(value) => {
+          refine(value)
+          setTimeout(() => {Keyboard.dismiss()}, 5000)
+        }}
         value={currentRefinement}
         placeholder="What are you looking for?"
         underlineColorAndroid={"#278585"}

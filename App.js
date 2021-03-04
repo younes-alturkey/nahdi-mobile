@@ -122,7 +122,7 @@ class App extends React.Component {
                 backgroundColor: '#278585',
               },
               headerTintColor: '#fff',
-              headerRight: () => <CartIcon cart={cart} />,
+              headerRight: () => <SearchIcon />,
             })}
           />
           <Stack.Screen

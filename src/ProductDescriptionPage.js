@@ -19,13 +19,14 @@ import { Icon, Overlay, Card } from 'react-native-elements';
 import 'react-native-gesture-handler';
 import Toast from 'react-native-toast-message';
 import { WebView } from 'react-native-webview';
-import { Rating } from 'react-native-ratings';
 
 class ProductDescriptionPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       visible: false,
+      favClicked: false,
+      shareClicked: false,
       quantity: 1,
       webViewUrl: '',
       sku: this.props.route.params.sku,
@@ -36,7 +37,7 @@ class ProductDescriptionPage extends React.Component {
   }
 
   fetchProducts = async sku => {
-    const authToken = '0f59x54cvzz3nd7wgdgcku74e5ikb1h4';
+    const authToken = '7foaw2i6dr6mljro9btnryi7gje75vyj';
 
     await fetch(
       `https://mcstaging.nahdionline.com/en/rest/V1/products/${sku}`,
@@ -313,6 +314,45 @@ class ProductDescriptionPage extends React.Component {
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
         >
+          <View
+            style={{
+              flexDirection: 'column',
+              justifyContent: 'flex-end',
+              position: 'absolute',
+              top: 0,
+              left: 330,
+              right: 0,
+              bottom: 600,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <View style={{ width: 50, height: 50 }}>
+              <Icon
+                name="heart"
+                type="font-awesome"
+                color={this.state.favClicked ? '#278585' : '#90A4AE'}
+                size={25}
+                onPress={() => {
+                  this.setState({ favClicked: !this.state.favClicked });
+                }}
+              />
+            </View>
+            <View style={{ width: 50, height: 50 }}>
+              <Icon
+                name="share-alt"
+                type="font-awesome"
+                color={this.state.shareClicked ? '#278585' : '#90A4AE'}
+                size={25}
+                onPress={() => {
+                  this.setState({ shareClicked: !this.state.shareClicked });
+                  setWebViewUrl(this.state.key_url);
+                  toggleOverlay();
+                }}
+              />
+            </View>
+            <View style={{ width: 50, height: 50, marginLeft: 18 }}></View>
+          </View>
           <TouchableOpacity style={{ padding: 20 }}>
             <Image
               source={{
@@ -322,99 +362,6 @@ class ProductDescriptionPage extends React.Component {
               style={{ width: 256, height: 256 }}
             />
           </TouchableOpacity>
-          <View
-            style={{
-              flexDirection: 'row',
-              marginTop: 20,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <View style={{ width: 50, height: 50 }}>
-              <Icon
-                reverse
-                name="truck"
-                type="font-awesome"
-                color="#278585"
-                size={16}
-                onPress={() => {
-                  Toast.show({
-                    text1: 'Same Day Delivery',
-                    text2: 'Order now and get it today 👌.',
-                    // type: 'info',
-                    position: 'bottom',
-                    bottomOffset: 60,
-                  });
-                }}
-              />
-            </View>
-            <View style={{ width: 50, height: 50 }}>
-              <Icon
-                reverse
-                name="shopping-bag"
-                type="font-awesome"
-                color="#278585"
-                size={16}
-                onPress={() => {
-                  Toast.show({
-                    text1: 'Available for Store Pickup',
-                    text2: 'Order now and pickup from any store anytime 👍.',
-                    // type: 'info',
-                    position: 'bottom',
-                    bottomOffset: 60,
-                  });
-                }}
-              />
-            </View>
-            <View style={{ width: 50, height: 50 }}>
-              <Icon
-                reverse
-                name="check-square"
-                type="font-awesome"
-                color="#278585"
-                size={16}
-                onPress={() => {
-                  Toast.show({
-                    text1: 'Stock Availability',
-                    text2: `There are ${15487} units of this product in-stock.`,
-                    position: 'bottom',
-                    bottomOffset: 60,
-                  });
-                }}
-              />
-            </View>
-            <View style={{ width: 50, height: 50 }}>
-              <Icon
-                reverse
-                name="gift"
-                type="font-awesome"
-                color="#278585"
-                size={16}
-                onPress={() => {
-                  Toast.show({
-                    text1: 'Nudeek Rewards',
-                    text2: 'Order now and receive 258 Nuhdeek points 🤩.',
-                    position: 'bottom',
-                    bottomOffset: 60,
-                  });
-                }}
-              />
-            </View>
-            <View style={{ width: 50, height: 50, marginHorizontal: 7 }}>
-              <TouchableOpacity
-                onPress={() => {
-                  setWebViewUrl(this.state.key_url);
-                  toggleOverlay();
-                }}
-              >
-                <Image
-                  source={require('../assets/images/icon.png')}
-                  style={{ width: 30, height: 30, marginTop: 10 }}
-                  resizeMode={'contain'}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
           <View>
             <Text
               numberOfLines={1}
@@ -523,66 +470,6 @@ class ProductDescriptionPage extends React.Component {
             >
               SKU {productData.sku}
             </Text>
-            <Text
-              style={{
-                textAlign: 'justify',
-                color: '#278585',
-                fontSize: 20,
-                paddingTop: 15,
-              }}
-            >
-              Rating
-            </Text>
-            <View>
-              <Rating
-                type="custom"
-                ratingColor="#278585"
-                ratingBackgroundColor="#fff"
-                ratingCount={5}
-                imageSize={40}
-                showRating
-                onFinishRating={() => {
-                  Toast.show({
-                    text1: 'Pseudo Rating Received',
-                    text2: 'Thank you for rating this product 😘.',
-                    position: 'bottom',
-                    bottomOffset: 60,
-                  });
-                }}
-              />
-            </View>
-            <Text
-              style={{
-                textAlign: 'justify',
-                color: '#278585',
-                fontSize: 20,
-                paddingVertical: 5,
-              }}
-            >
-              Review
-            </Text>
-            <TouchableOpacity
-              onPress={() => {
-                Toast.show({
-                  text1: 'Review Not Available',
-                  text2: 'This feature is not currently implemented.',
-                  position: 'bottom',
-                  bottomOffset: 60,
-                });
-              }}
-            >
-              <TextInput
-                editable={false}
-                placeholder={'Write a review...'}
-                style={{
-                  borderWidth: 1,
-                  borderColor: '#278585',
-                  lineHeight: 40,
-                  padding: 20,
-                  width: '95%',
-                }}
-              />
-            </TouchableOpacity>
             <Text
               style={{
                 textAlign: 'justify',
@@ -767,70 +654,93 @@ class ProductDescriptionPage extends React.Component {
             flexDirection: 'row',
             justifyContent: 'center',
             alignItems: 'center',
-            height: 50,
-            paddingTop: 25,
-            width: '100%',
-            backgroundColor: '#fff',
           }}
         >
-          <View style={{ width: 50, height: 50, marginTop: 10 }}>
-            <Icon
-              name="minus"
-              type="font-awesome"
-              color="#278585"
-              size={20}
-              onPress={this.decrementQuantity.bind(this)}
-            />
+          <View
+            style={{ width: '80%', height: 50, backgroundColor: '#278585' }}
+          >
+            <TouchableHighlight
+              style={{ width: '100%' }}
+              underlayColor="#90A4AE"
+              activeOpacity={0.6}
+              onPress={() => {
+                this.setQty(this.state.quantity);
+                this.props.route.params.cart.products.push({
+                  sku: this.state.sku,
+                  name: productData.name,
+                  price: `${productData.price.toFixed(2)} SAR`,
+                  imageUrl: this.state.imageUrl,
+                  url: this.state.key_url,
+                  qty: this.state.quantity,
+                  index: this.props.route.params.cart.indices++,
+                });
+                this.props.route.params.cart.total =
+                  this.props.route.params.cart.total +
+                  productData.price * this.state.quantity;
+                console.log(this.props.route.params.cart);
+                this.resetQuantity();
+                navigation.navigate('ProductDescriptionPage');
+              }}
+            >
+              <View style={{ padding: 5 }}>
+                <Icon
+                  name="cart-plus"
+                  type="font-awesome"
+                  color="#fff"
+                  size={30}
+                />
+              </View>
+            </TouchableHighlight>
           </View>
-          <View style={{ width: 50, height: 50 }}>
+          <TouchableOpacity
+            style={{
+              width: '12%',
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: '#fff',
+              borderColor: '#278585',
+              borderWidth: 1,
+              height: 50,
+            }}
+          >
             <Text
               style={{
                 textAlign: 'center',
-                fontSize: 18,
+                fontSize: 22,
                 color: '#278585',
                 fontWeight: 'bold',
-                borderColor: '#90A4AE',
-                borderWidth: 1,
               }}
+              onPress={this.incrementQuantity.bind(this)}
             >
-              {this.state.quantity}
+              x{this.state.quantity}
             </Text>
-          </View>
-          <View style={{ width: 50, height: 50, marginTop: 10 }}>
+          </TouchableOpacity>
+          <TouchableOpacity style={{ width: '8%' }} onPress={this.resetQuantity.bind(this)}>
             <Icon
-              name="plus"
+              name="minus"
+              type="font-awesome"
+              color="#FF0000"
+              size={25}
+            />
+          </TouchableOpacity>
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <View style={{ width: 100, height: 40 }}>
+            <Icon
+              name="home"
               type="font-awesome"
               color="#278585"
-              size={20}
+              size={40}
               onPress={this.incrementQuantity.bind(this)}
             />
           </View>
         </View>
-        <TouchableHighlight
-          style={{ width: '100%', backgroundColor: '#278585' }}
-          underlayColor="#90A4AE"
-          activeOpacity={0.6}
-          onPress={() => {
-            this.setQty(this.state.quantity);
-            this.props.route.params.cart.products.push({
-              sku: this.state.sku,
-              name: productData.name,
-              price: `${productData.price.toFixed(2)} SAR`,
-              imageUrl: this.state.imageUrl,
-              url: this.state.key_url,
-              qty: this.state.quantity,
-              index: this.props.route.params.cart.indices++
-            });
-            this.props.route.params.cart.total = this.props.route.params.cart.total + (productData.price * this.state.quantity)
-            console.log(this.props.route.params.cart)
-            this.resetQuantity();
-            navigation.navigate('ProductDescriptionPage');
-          }}
-        >
-          <View style={{ padding: 5 }}>
-            <Icon name="cart-plus" type="font-awesome" color="#fff" size={30} />
-          </View>
-        </TouchableHighlight>
       </SafeAreaView>
     );
   }
@@ -879,7 +789,7 @@ const styles = StyleSheet.create({
 });
 
 // Wrap and export
-export default function (props) {
+export default function(props) {
   const navigation = useNavigation();
 
   return <ProductDescriptionPage {...props} navigation={navigation} />;
