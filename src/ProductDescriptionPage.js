@@ -19,8 +19,8 @@ import { useNavigation } from '@react-navigation/native';
 import { Icon, Overlay, Card } from 'react-native-elements';
 import 'react-native-gesture-handler';
 import Toast from 'react-native-toast-message';
+import CountDown from 'react-native-countdown-component';
 import { WebView } from 'react-native-webview';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
 class ProductDescriptionPage extends React.Component {
@@ -53,7 +53,7 @@ class ProductDescriptionPage extends React.Component {
     //     return tokenRes.data;
     //   })
     //   .catch(err => console.log);
-    const authToken = 'oxd6s6qrkxt8vbktl0n3g1l3fwoewvna';
+    const authToken = 'z29lzfpatpz1urkxtf71xt1d5mazdfmk';
 
     const { sku, imageUrl, key_url, manufacturer } = this.state;
     console.log('Authentication Token: ', authToken);
@@ -208,52 +208,13 @@ class ProductDescriptionPage extends React.Component {
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
         >
-          <View
-            style={{
-              flexDirection: 'column',
-              justifyContent: 'flex-end',
-              position: 'absolute',
-              top: 0,
-              left: 330,
-              right: 0,
-              bottom: 400,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <View style={{ width: 50, height: 50 }}>
-              <Icon
-                name="heart"
-                type="font-awesome"
-                color={this.state.favClicked ? '#278585' : '#90A4AE'}
-                size={25}
-                onPress={() => {
-                  this.setState({ favClicked: !this.state.favClicked });
-                }}
-              />
-            </View>
-            <View style={{ width: 50, height: 50 }}>
-              <Icon
-                name="share-alt"
-                type="font-awesome"
-                color={this.state.shareClicked ? '#278585' : '#90A4AE'}
-                size={25}
-                onPress={() => {
-                  this.setState({ shareClicked: !this.state.shareClicked });
-                  setWebViewUrl(this.state.key_url);
-                  toggleOverlay();
-                }}
-              />
-            </View>
-            <View style={{ width: 50, height: 50, marginLeft: 18 }}></View>
-          </View>
           <TouchableOpacity style={{ padding: 20 }}>
             <Image
               source={{
                 uri: this.state.imageUrl,
               }}
               resizeMode={'contain'}
-              style={{ width: 256, height: 400 }}
+              style={{ width: 256, height: 350 }}
             />
           </TouchableOpacity>
           <View>
@@ -262,7 +223,7 @@ class ProductDescriptionPage extends React.Component {
               ellipsizeMode="tail"
               style={{
                 textAlign: 'justify',
-                color: '#278585',
+                color: '#90A4AE',
                 fontSize: 12,
               }}
             >
@@ -273,9 +234,10 @@ class ProductDescriptionPage extends React.Component {
               ellipsizeMode="tail"
               style={{
                 textAlign: 'justify',
-                color: '#278585',
-                fontSize: 18,
-                paddingVertical: 15,
+                color: '#000',
+                fontSize: 16,
+                paddingTop: 5,
+                paddingBottom: 15,
               }}
             >
               {productData.name}
@@ -284,7 +246,7 @@ class ProductDescriptionPage extends React.Component {
               style={{
                 textAlign: 'justify',
                 fontSize: 16,
-                color: '#90A4AE',
+                color: '#000',
               }}
             >
               SAR{'  '}
@@ -318,7 +280,7 @@ class ProductDescriptionPage extends React.Component {
               >
                 {productData.price.toFixed(2)}
               </Text>
-              {'                        '}
+              {'                  '}
               <Text
                 style={{
                   fontSize: 14,
@@ -328,22 +290,102 @@ class ProductDescriptionPage extends React.Component {
                 {`(Inclusive of VAT)`}
               </Text>
             </Text>
+            <View
+              style={{
+                flexDirection: 'column',
+                paddingTop: 20,
+                justifyContent: 'flex-start',
+              }}
+            >
+              <View style={{ flexDirection: 'row', marginBottom: 8 }}>
+                <Image
+                  style={{ width: 20, height: 20 }}
+                  source={require('../assets/images/medal.png')}
+                />
+                <Text
+                  style={{
+                    paddingHorizontal: 15,
+                    paddingTop: 5,
+                    fontSize: 12,
+                    fontStyle: 'italic',
+                    color: '#000',
+                  }}
+                >
+                  {`manufactured by ${productData.manufacturer}`}
+                </Text>
+              </View>
+              <View style={{ flexDirection: 'row', marginBottom: 8 }}>
+                <Image
+                  style={{ width: 20, height: 20 }}
+                  source={require('../assets/images/refund.png')}
+                />
+                <Text
+                  style={{
+                    paddingHorizontal: 15,
+                    paddingTop: 5,
+                    fontSize: 12,
+                    fontStyle: 'italic',
+                    color: '#000',
+                  }}
+                >
+                  {`this product is ${
+                    productData.is_returnable === '2'
+                      ? 'not returnable'
+                      : 'returnable'
+                  }`}
+                </Text>
+              </View>
+              <View style={{ flexDirection: 'row' }}>
+                <Image
+                  style={{ width: 20, height: 20 }}
+                  source={require('../assets/images/logistics.png')}
+                />
+                <Text
+                  style={{
+                    paddingHorizontal: 15,
+                    marginTop: 4,
+                    fontSize: 12,
+                    fontStyle: 'italic',
+                    color: '#000',
+                  }}
+                >
+                  guaranteed delivery within
+                </Text>
+                <View>
+                  <CountDown
+                    digitStyle={{ backgroundColor: '#fff' }}
+                    digitTxtStyle={{
+                      color: '#278585',
+                      fontSize: 12,
+                      paddingBottom: 18,
+                    }}
+                    timeToShow={['H', 'M', 'S']}
+                    timeLabels={{ h: null, m: null, s: null }}
+                    until={9000}
+                    size={16}
+                    showSeparator
+                    separatorStyle={{ paddingBottom: 18 }}
+                  />
+                </View>
+              </View>
+            </View>
             <Text
               style={{
                 textAlign: 'justify',
-                color: '#278585',
-                fontSize: 20,
+                color: '#000',
+                fontSize: 16,
                 paddingVertical: 15,
               }}
             >
-              {'Product Description'}
+              Product Details
             </Text>
             <Text
               style={{
                 textAlign: 'justify',
-                color: '#90A4AE',
+                color: '#000',
                 fontSize: 12,
                 lineHeight: 20,
+                paddingBottom: 15,
               }}
               numberOfLines={5}
               ellipsizeMode="tail"
@@ -356,29 +398,7 @@ class ProductDescriptionPage extends React.Component {
             <Text
               style={{
                 textAlign: 'justify',
-                color: '#278585',
-                fontSize: 20,
-                paddingVertical: 15,
-              }}
-            >
-              Product Info
-            </Text>
-            <Text
-              style={{
-                textAlign: 'justify',
-                color: '#90A4AE',
-                fontSize: 12,
-              }}
-            >
-              This product is{' '}
-              {productData.is_returnable === '2'
-                ? 'not returnable'
-                : 'returnable'}
-            </Text>
-            <Text
-              style={{
-                textAlign: 'justify',
-                color: '#90A4AE',
+                color: '#000',
                 fontSize: 12,
               }}
             >
@@ -387,16 +407,16 @@ class ProductDescriptionPage extends React.Component {
             <Text
               style={{
                 textAlign: 'justify',
-                color: '#90A4AE',
+                color: '#000',
                 fontSize: 12,
               }}
             >
-              Manufacturer id {productData.manufacturer}
+              Manufacturer id {productData.manufacturerId}
             </Text>
             <Text
               style={{
                 textAlign: 'justify',
-                color: '#90A4AE',
+                color: '#000',
                 fontSize: 12,
               }}
             >
@@ -408,7 +428,7 @@ class ProductDescriptionPage extends React.Component {
             <Text
               style={{
                 textAlign: 'justify',
-                color: '#90A4AE',
+                color: '#000',
                 fontSize: 12,
               }}
             >
@@ -417,22 +437,170 @@ class ProductDescriptionPage extends React.Component {
             <Text
               style={{
                 textAlign: 'justify',
-                color: '#278585',
-                fontSize: 20,
-                paddingTop: 15,
+                color: '#000',
+                fontSize: 16,
+                paddingVertical: 15,
               }}
             >
               Related Products
             </Text>
-            <Text
+            <View
               style={{
-                textAlign: 'justify',
-                color: '#90A4AE',
-                fontSize: 12,
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
               }}
             >
-              No related products found
-            </Text>
+              <ScrollView
+                horizontal={true}
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
+                style={{ height: 160 }}
+              >
+                <TouchableOpacity
+                  style={{
+                    width: 150,
+                    height: 150,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                  onPress={() => {
+                    navigation.navigate('HomeScreen');
+                    navigation.navigate('ProductDescriptionPage', {
+                      sku: '100015816',
+                      name: 'Fevadol 500 mg Tablet 20pcs',
+                      imageUrl:
+                        'https://nahdionline.com/media/catalog/product/1/0/100015816-01.jpg',
+                      url: 'fevadol-500-mg-tablet-20pcs',
+                      manufacturer: 'Fevadol',
+                      cart: this.props.cart,
+                    });
+                  }}
+                >
+                  <Image
+                    source={{
+                      uri:
+                        'https://nahdionline.com/media/catalog/product/1/0/100015816-01.jpg',
+                    }}
+                    style={{ width: 128, height: 128 }}
+                    resizeMode={'contain'}
+                  />
+                  <Text style={{ fontSize: 10, color: '#000' }}>
+                    SAR{' '}
+                    <Text style={{ fontSize: 12, color: '#000' }}>3.85</Text>
+                  </Text>
+                  <Text style={{ fontSize: 14, color: '#000' }}>
+                    Fevadol 500 mg
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    width: 150,
+                    height: 150,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                  onPress={() => {
+                    navigation.navigate('HomeScreen');
+                    navigation.navigate('ProductDescriptionPage', {
+                      sku: '100014160',
+                      name: 'Panadol-Cold&Flu Caplet 24pcs',
+                      imageUrl:
+                        'https://nahdionline.com/media/catalog/product/1/0/100014160_0.jpg',
+                      url: 'fevadol-500-mg-tablet-20pcs',
+                      manufacturer: 'Panadol',
+                      cart: this.props.cart,
+                    });
+                  }}
+                >
+                  <Image
+                    source={{
+                      uri:
+                        'https://nahdionline.com/media/catalog/product/1/0/100014160_0.jpg',
+                    }}
+                    style={{ width: 128, height: 128 }}
+                    resizeMode={'contain'}
+                  />
+                  <Text style={{ fontSize: 10, color: '#000' }}>
+                    SAR{' '}
+                    <Text style={{ fontSize: 12, color: '#000' }}>10.7</Text>
+                  </Text>
+                  <Text style={{ fontSize: 14, color: '#000' }}>
+                    Panadol Cold+Flu
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    width: 150,
+                    height: 150,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                  onPress={() => {
+                    navigation.navigate('HomeScreen');
+                    navigation.navigate('ProductDescriptionPage', {
+                      sku: '100015980',
+                      name: 'Panadol-Extra Tablet 24 pcs',
+                      imageUrl:
+                        'https://nahdionline.com/media/catalog/product/1/0/100015980_0.jpg',
+                      url: 'panadol-extra-tablet-24-pcs',
+                      manufacturer: 'Panadol',
+                      cart: this.props.cart,
+                    });
+                  }}
+                >
+                  <Image
+                    source={{
+                      uri:
+                        'https://nahdionline.com/media/catalog/product/1/0/100015980_0.jpg',
+                    }}
+                    style={{ width: 128, height: 128 }}
+                    resizeMode={'contain'}
+                  />
+                  <Text style={{ fontSize: 10, color: '#000' }}>
+                    SAR <Text style={{ fontSize: 12, color: '#000' }}>22</Text>
+                  </Text>
+                  <Text style={{ fontSize: 14, color: '#000' }}>
+                    Dove Shower Gel
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    width: 150,
+                    height: 150,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                  onPress={() => {
+                    navigation.navigate('HomeScreen');
+                    navigation.navigate('ProductDescriptionPage', {
+                      sku: '101086229',
+                      name: 'Lightness Baby Tea Herbal Instant 20 Sachets',
+                      imageUrl:
+                        'https://nahdionline.com/media/catalog/product/1/0/101086229_0.jpg',
+                      url: 'lightness-baby-tea-herbal-instant-20-sachets',
+                      manufacturer: 'Centrum',
+                      cart: this.props.cart,
+                    });
+                  }}
+                >
+                  <Image
+                    source={{
+                      uri:
+                        'https://nahdionline.com/media/catalog/product/1/0/101086229_0.jpg',
+                    }}
+                    style={{ width: 128, height: 128 }}
+                    resizeMode={'contain'}
+                  />
+                  <Text style={{ fontSize: 10, color: '#000' }}>
+                    SAR <Text style={{ fontSize: 12, color: '#000' }}>27</Text>
+                  </Text>
+                  <Text style={{ fontSize: 14, color: '#000' }}>
+                    Lightness Baby Tea
+                  </Text>
+                </TouchableOpacity>
+              </ScrollView>
+            </View>
           </View>
           <View style={{ paddingBottom: 30 }} />
         </ScrollView>
@@ -459,15 +627,6 @@ class ProductDescriptionPage extends React.Component {
             <Text
               style={{
                 textAlign: 'center',
-                fontSize: 14,
-                color: '#278585',
-              }}
-            >
-              Qty
-            </Text>
-            <Text
-              style={{
-                textAlign: 'center',
                 fontSize: 18,
                 color: '#278585',
                 fontWeight: 'bold',
@@ -475,6 +634,26 @@ class ProductDescriptionPage extends React.Component {
             >
               {this.state.quantity}
             </Text>
+            <View
+              style={{ flexDirection: 'row', justifyContent: 'space-between' }}
+            >
+              <Text
+                style={{
+                  color: '#278585',
+                  fontSize: 12,
+                  fontWeight: 'bold',
+                  marginRight: 3,
+                }}
+              >
+                Qty
+              </Text>
+              <Icon
+                name="level-up"
+                type="font-awesome"
+                color="#278585"
+                size={15}
+              />
+            </View>
           </TouchableOpacity>
           <TouchableHighlight
             style={{
@@ -505,7 +684,26 @@ class ProductDescriptionPage extends React.Component {
               navigation.navigate('ProductDescriptionPage');
             }}
           >
-            <Icon name="cart-plus" type="font-awesome" color="#fff" size={30} />
+            <View
+              style={{ flexDirection: 'row', justifyContent: 'space-between' }}
+            >
+              <Icon
+                name="cart-plus"
+                type="font-awesome"
+                color="#fff"
+                size={30}
+              />
+              <Text
+                style={{
+                  color: '#fff',
+                  fontSize: 22,
+                  fontWeight: 'bold',
+                  marginLeft: 20,
+                }}
+              >
+                Add to Cart
+              </Text>
+            </View>
           </TouchableHighlight>
         </View>
       </SafeAreaView>
