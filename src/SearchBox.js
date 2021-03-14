@@ -4,23 +4,24 @@ import PropTypes from 'prop-types';
 import { connectSearchBox } from 'react-instantsearch-native';
 
 const SearchBox = ({ currentRefinement, refine }) => {
-
-  return(
+  return (
     <View style={styles.container}>
       <TextInput
         style={styles.input}
-        onChangeText={(value) => {
-          refine(value)
-          setTimeout(() => {Keyboard.dismiss()}, 5000)
+        onChangeText={value => {
+          refine(value);
+          setTimeout(() => {
+            Keyboard.dismiss();
+          }, 5000);
         }}
         value={currentRefinement}
         placeholder="What are you looking for?"
-        underlineColorAndroid={"#278585"}
+        underlineColorAndroid={'#278585'}
         autoFocus={true}
       />
     </View>
   );
-}
+};
 
 SearchBox.propTypes = {
   currentRefinement: PropTypes.string.isRequired,
@@ -37,8 +38,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     backgroundColor: '#fff',
     borderRadius: 4,
-    borderColor: "#278585",
-    color: "#278585",
+    borderColor: '#278585',
+    color: '#278585',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,

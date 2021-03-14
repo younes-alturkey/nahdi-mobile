@@ -715,13 +715,11 @@ class ProductDescriptionPage extends React.Component {
               x{this.state.quantity}
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={{ width: '8%' }} onPress={this.resetQuantity.bind(this)}>
-            <Icon
-              name="minus"
-              type="font-awesome"
-              color="#FF0000"
-              size={25}
-            />
+          <TouchableOpacity
+            style={{ width: '8%' }}
+            onPress={this.resetQuantity.bind(this)}
+          >
+            <Icon name="minus" type="font-awesome" color="#FF0000" size={25} />
           </TouchableOpacity>
         </View>
         <View

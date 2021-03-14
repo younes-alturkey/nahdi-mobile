@@ -6,14 +6,13 @@ import { useNavigation } from '@react-navigation/native';
 class CartIcon extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-    };
+    this.state = {};
   }
 
   setQty = val => {
-    console.log(this.props.cart.qty)
+    console.log(this.props.cart.qty);
     this.props.cart.qty = this.props.cart.qty + val;
-    this.forceUpdate()
+    this.forceUpdate();
   };
 
   render() {

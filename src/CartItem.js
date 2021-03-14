@@ -22,7 +22,6 @@ class CartItem extends Component {
     const { navigation, product } = this.props;
     console.log(product.imageUrl);
 
-
     return (
       <Card style={styles.card}>
         <Card.Title
@@ -36,20 +35,24 @@ class CartItem extends Component {
           <Image
             source={{ uri: product.imageUrl }}
             style={{ width: 80, height: 80 }}
-            resizeMode={'contain'}
+            resi
+            zeMode={'contain'}
           />
           <Text style={{ paddingLeft: 10, paddingTop: 30, color: '#90A4AE' }}>
             x {product.qty}
           </Text>
+
           <Text style={{ paddingTop: 30, paddingLeft: 50, color: '#90A4AE' }}>
             {product.price.length < 9 ? ' ' + product.price : product.price}
           </Text>
           <View style={{ paddingTop: 20, paddingLeft: 85 }}>
-            <TouchableOpacity onPress={() => {
+            <TouchableOpacity
+              onPress={() => {
                 product.sku = null;
                 this.props.updateCart(product.qty, product.name, product.price);
-                navigation.navigate('CartView')
-            }}>
+                navigation.navigate('CartView');
+              }}
+            >
               <Icon
                 size={30}
                 name="trash"
