@@ -37,7 +37,7 @@ class ProductDescriptionPage extends React.Component {
   }
 
   fetchProducts = async sku => {
-    const authToken = '7foaw2i6dr6mljro9btnryi7gje75vyj';
+    const authToken = '0wakolgyvujg11q5ve1ukgj4krw1h7ha';
 
     await fetch(
       `https://mcstaging.nahdionline.com/en/rest/V1/products/${sku}`,
@@ -656,52 +656,18 @@ class ProductDescriptionPage extends React.Component {
             alignItems: 'center',
           }}
         >
-          <View
-            style={{ width: '80%', height: 50, backgroundColor: '#278585' }}
-          >
-            <TouchableHighlight
-              style={{ width: '100%' }}
-              underlayColor="#90A4AE"
-              activeOpacity={0.6}
-              onPress={() => {
-                this.setQty(this.state.quantity);
-                this.props.route.params.cart.products.push({
-                  sku: this.state.sku,
-                  name: productData.name,
-                  price: `${productData.price.toFixed(2)} SAR`,
-                  imageUrl: this.state.imageUrl,
-                  url: this.state.key_url,
-                  qty: this.state.quantity,
-                  index: this.props.route.params.cart.indices++,
-                });
-                this.props.route.params.cart.total =
-                  this.props.route.params.cart.total +
-                  productData.price * this.state.quantity;
-                console.log(this.props.route.params.cart);
-                this.resetQuantity();
-                navigation.navigate('ProductDescriptionPage');
-              }}
-            >
-              <View style={{ padding: 5 }}>
-                <Icon
-                  name="cart-plus"
-                  type="font-awesome"
-                  color="#fff"
-                  size={30}
-                />
-              </View>
-            </TouchableHighlight>
-          </View>
           <TouchableOpacity
             style={{
-              width: '12%',
+              width: '15%',
               justifyContent: 'center',
               alignItems: 'center',
               backgroundColor: '#fff',
               borderColor: '#278585',
-              borderWidth: 1,
+              borderWidth: 2,
               height: 50,
             }}
+            onPress={this.incrementQuantity.bind(this)}
+            onLongPress={() => this.resetQuantity()}
           >
             <Text
               style={{
@@ -710,17 +676,50 @@ class ProductDescriptionPage extends React.Component {
                 color: '#278585',
                 fontWeight: 'bold',
               }}
-              onPress={this.incrementQuantity.bind(this)}
             >
-              x{this.state.quantity}
+              {this.state.quantity}
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={{ width: '8%' }}
-            onPress={this.resetQuantity.bind(this)}
+
+          <TouchableHighlight
+            style={{
+              width: '85%',
+              height: 50,
+              backgroundColor: '#278585',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+            underlayColor="#90A4AE"
+            activeOpacity={0.6}
+            onPress={() => {
+              this.setQty(this.state.quantity);
+              this.props.route.params.cart.products.push({
+                sku: this.state.sku,
+                name: productData.name,
+                price: `${productData.price.toFixed(2)} SAR`,
+                imageUrl: this.state.imageUrl,
+                url: this.state.key_url,
+                qty: this.state.quantity,
+                index: this.props.route.params.cart.indices++,
+              });
+              this.props.route.params.cart.total =
+                this.props.route.params.cart.total +
+                productData.price * this.state.quantity;
+              console.log(this.props.route.params.cart);
+              this.resetQuantity();
+              navigation.navigate('ProductDescriptionPage');
+            }}
           >
-            <Icon name="minus" type="font-awesome" color="#FF0000" size={25} />
-          </TouchableOpacity>
+            <Icon name="cart-plus" type="font-awesome" color="#fff" size={30} />
+          </TouchableHighlight>
+          {/* <TouchableOpacity style={{ width: '8%' }} onPress={this.resetQuantity.bind(this)}>
+            <Icon
+              name="minus"
+              type="font-awesome"
+              color="#FF0000"
+              size={25}
+            />
+          </TouchableOpacity> */}
         </View>
         <View
           style={{
