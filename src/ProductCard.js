@@ -61,6 +61,7 @@ class ProductCard extends Component {
             name: item.name,
             imageUrl: imageUrl,
             url: url,
+            manufacturer: item.manufacturer,
             cart: this.props.cart,
           });
         }}
@@ -151,7 +152,14 @@ class ProductCard extends Component {
                 qty: this.state.quantity,
                 index: this.props.cart.indices++,
               });
-              this.props.cart.total = this.props.cart.total + (parseFloat(item.price.SAR.default_formated.replace(/[^0-9, ., ]/g, '').trim()) * this.state.quantity)
+              this.props.cart.total =
+                this.props.cart.total +
+                parseFloat(
+                  item.price.SAR.default_formated
+                    .replace(/[^0-9, ., ]/g, '')
+                    .trim()
+                ) *
+                  this.state.quantity;
               this.resetQuantity();
               navigation.navigate('ProductListPage');
             }}

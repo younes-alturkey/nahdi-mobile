@@ -19,6 +19,7 @@ import SearchHeader from './src/SearchHeader';
 import CartIcon from './src/CartIcon';
 import CartScreen from './src/CartScreen';
 import SearchIcon from './src/SearchIcon';
+import HomeIcon from './src/HomeIcon';
 
 LogBox.ignoreLogs(['Setting a timer']);
 
@@ -88,7 +89,7 @@ class App extends React.Component {
                   }}
                 >
                   <Image
-                    style={{ width: 30, height: 30, marginLeft: 15 }}
+                    style={{ width: 35, height: 35, marginLeft: 15 }}
                     source={require('./assets/images/icon.png')}
                   />
                 </TouchableOpacity>
@@ -122,7 +123,7 @@ class App extends React.Component {
                 backgroundColor: '#278585',
               },
               headerTintColor: '#fff',
-              headerRight: () => <SearchIcon />,
+              headerRight: () => <CartIcon cart={cart} />,
             })}
           />
           <Stack.Screen

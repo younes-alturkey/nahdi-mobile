@@ -21,21 +21,25 @@ class CartIcon extends React.Component {
     return (
       <TouchableOpacity onPress={() => navigation.navigate('CartView')}>
         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-          <Text
-            style={{
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: 10,
-              textAlign: 'center',
-              color: '#fff',
-              backgroundColor: '#ff6900',
-              width: 15,
-              height: 15,
-              borderRadius: 15 / 2,
-            }}
-          >
-            {this.props.cart.qty}
-          </Text>
+          {this.props.cart.qty <= 0 ? (
+            <Text></Text>
+          ) : (
+            <Text
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: 10,
+                textAlign: 'center',
+                color: '#fff',
+                backgroundColor: '#ff6900',
+                width: 15,
+                height: 15,
+                borderRadius: 15 / 2,
+              }}
+            >
+              {this.props.cart.qty}
+            </Text>
+          )}
           <View>
             <Icon
               name="shopping-basket"

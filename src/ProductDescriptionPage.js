@@ -13,12 +13,15 @@ import {
   TextInput,
   LogBox,
   ActivityIndicator,
+  useEffect,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Icon, Overlay, Card } from 'react-native-elements';
 import 'react-native-gesture-handler';
 import Toast from 'react-native-toast-message';
 import { WebView } from 'react-native-webview';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 class ProductDescriptionPage extends React.Component {
   constructor(props) {
@@ -30,192 +33,85 @@ class ProductDescriptionPage extends React.Component {
       quantity: 1,
       webViewUrl: '',
       sku: this.props.route.params.sku,
+      manufacturer: this.props.route.params.manufacturer,
       imageUrl: this.props.route.params.imageUrl,
       key_url: this.props.route.params.url,
       productData: {},
     };
   }
 
-  fetchProducts = async sku => {
-    const authToken = '0wakolgyvujg11q5ve1ukgj4krw1h7ha';
+  fetchProducts = async () => {
+    // const authToken = await axios
+    //   .post(
+    //     'https://mcstaging.nahdionline.com/en/rest/V1/integration/admin/token',
+    //     {
+    //       username: 'younes',
+    //       password: 'Nahdi@123',
+    //     }
+    //   )
+    //   .then(tokenRes => {
+    //     return tokenRes.data;
+    //   })
+    //   .catch(err => console.log);
+    const authToken = 'oxd6s6qrkxt8vbktl0n3g1l3fwoewvna';
 
-    await fetch(
-      `https://mcstaging.nahdionline.com/en/rest/V1/products/${sku}`,
-      {
+    const { sku, imageUrl, key_url, manufacturer } = this.state;
+    console.log('Authentication Token: ', authToken);
+    const productRes = await axios
+      .get(`https://mcstaging.nahdionline.com/en/rest/V1/products/${sku}`, {
         headers: {
           Accept: 'application/json',
           Authorization: 'Bearer ' + authToken,
         },
-      }
-    )
-      .then(response => {
-        if (!response.ok) return undefined;
-        return response.json();
       })
-      .then(jsonResponse => {
-        if (!jsonResponse) {
-          Toast.show({
-            text1: 'Data Fetch Failed',
-            text2: 'Something went wrong.',
-            visibilityTime: 3000,
-            position: 'bottom',
-            bottomOffset: 60,
-          });
-          return;
-        }
-        if (!this.state.productData.name) {
-          let customAttributes = {
-            description: '',
-            image: '',
-            url_key: '',
-            gift_wrapping_available: '',
-            manufacturer: '',
-            is_returnable: '',
-            dc_only: '',
-            safety_stock_level: '',
-            alternative_product: '',
-            relatedProducts: [],
-            nahdi_rewards_factor: 0,
-            updated_at: '',
-          };
-
-          jsonResponse.custom_attributes.filter(function(item) {
-            if (item.attribute_code === 'description')
-              customAttributes.description = item.value;
-
-            if (item.attribute_code === 'image')
-              customAttributes.image = item.value;
-
-            if (item.attribute_code === 'url_key')
-              customAttributes.url_key = item.value;
-
-            if (item.attribute_code === 'gift_wrapping_available')
-              customAttributes.gift_wrapping_available = item.value;
-
-            if (item.attribute_code === 'manufacturer')
-              customAttributes.manufacturer = item.value;
-
-            if (item.attribute_code === 'is_returnable')
-              customAttributes.is_returnable = item.value;
-
-            if (item.attribute_code === 'dc_only')
-              customAttributes.dc_only = item.value;
-
-            if (item.attribute_code === 'safety_stock_level')
-              customAttributes.safety_stock_level = item.value;
-
-            if (item.attribute_code === 'alternative_product')
-              customAttributes.alternative_product = item.value;
-
-            if (item.attribute_code === 'nahdi_rewards_factor')
-              customAttributes.nahdi_rewards_factor = item.value;
-            return;
-          });
-
-          let arAlternativeProducts = customAttributes.alternative_product.split(
-            ','
-          );
-
-          //Limiting related products to only two
-          if (arAlternativeProducts.length > 2)
-            arAlternativeProducts = arAlternativeProducts.slice(0, 2);
-
-          if (arAlternativeProducts[0] === '') arAlternativeProducts = null;
-
-          if (arAlternativeProducts !== null) {
-            if (arAlternativeProducts[1] === '')
-              arAlternativeProducts = arAlternativeProducts.slice(0, 1);
-
-            // console.log(`Related ${jsonResponse.sku} SKUs`);
-            // console.log(arAlternativeProducts);
-
-            for (let i = 0; i < arAlternativeProducts.length; i++) {
-              fetch(
-                `https://mcstaging.nahdionline.com/en/rest/V1/products/${arAlternativeProducts[i]}`,
-                {
-                  headers: {
-                    Accept: 'application/json',
-                    Authorization: 'Bearer ' + authToken,
-                  },
-                }
-              )
-                .then(response => response.json())
-                .then(jsonRelatedResponse => {
-                  let customAlternativeAttributes = {
-                    name: '',
-                    price: '',
-                    image: '',
-                    url_key: '',
-                  };
-
-                  jsonRelatedResponse.custom_attributes.filter(function(item) {
-                    if (item.attribute_code === 'image')
-                      customAlternativeAttributes.image = item.value;
-
-                    if (item.attribute_code === 'url_key')
-                      customAlternativeAttributes.url_key = item.value;
-                    return;
-                  });
-
-                  customAttributes.relatedProducts.push({
-                    name: jsonRelatedResponse.name,
-                    price: jsonRelatedResponse.price,
-                    image: customAlternativeAttributes.image,
-                    url_key: customAlternativeAttributes.url_key,
-                  });
-
-                  this.setState({
-                    productData: {
-                      name: jsonResponse.name,
-                      price: jsonResponse.price,
-                      sku: jsonResponse.sku,
-                      status: jsonResponse.status,
-                      updated_at: jsonResponse.updated_at,
-                      description: customAttributes.description,
-                      image: customAttributes.image,
-                      url_key: customAttributes.url_key,
-                      gift_wrapping_available:
-                        customAttributes.gift_wrapping_available,
-                      manufacturer: customAttributes.manufacturer,
-                      is_returnable: customAttributes.is_returnable,
-                      dc_only: customAttributes.dc_only,
-                      safety_stock_level: customAttributes.safety_stock_level,
-                      alternative_product: customAttributes.alternative_product,
-                      relatedProducts: customAttributes.relatedProducts,
-                      nahdi_rewards_factor:
-                        customAttributes.nahdi_rewards_factor,
-                    },
-                  });
-                });
-            }
-          } else {
-            this.setState({
-              productData: {
-                name: jsonResponse.name,
-                price: jsonResponse.price,
-                sku: jsonResponse.sku,
-                status: jsonResponse.status,
-                updated_at: jsonResponse.updated_at,
-                description: customAttributes.description,
-                image: customAttributes.image,
-                url_key: customAttributes.url_key,
-                gift_wrapping_available:
-                  customAttributes.gift_wrapping_available,
-                manufacturer: customAttributes.manufacturer,
-                is_returnable: customAttributes.is_returnable,
-                dc_only: customAttributes.dc_only,
-                safety_stock_level: customAttributes.safety_stock_level,
-                alternative_product: customAttributes.alternative_product,
-                relatedProducts: customAttributes.relatedProducts,
-                nahdi_rewards_factor: customAttributes.nahdi_rewards_factor,
-              },
-            });
-          }
-        }
+      .then(response => {
+        return response.data;
       })
       .catch(error => {
         console.log(error);
       });
+
+    let productData = {
+      name: productRes.name,
+      sku: sku,
+      manufacturer: manufacturer,
+      price: productRes.price,
+      updated_at: productRes.updated_at,
+      description: '',
+      image: imageUrl,
+      url_key: key_url,
+      store_pickup_available: '',
+      manufacturerId: '',
+      is_returnable: '',
+      dc_only: '',
+      safety_stock_level: '',
+      nahdi_rewards_factor: 0,
+    };
+
+    productRes.custom_attributes.filter(function(item) {
+      if (item.attribute_code === 'description')
+        productData.description = item.value;
+
+      if (item.attribute_code === 'store_pickup_available')
+        productData.store_pickup_available = item.value;
+
+      if (item.attribute_code === 'manufacturer')
+        productData.manufacturerId = item.value;
+
+      if (item.attribute_code === 'is_returnable')
+        productData.is_returnable = item.value;
+
+      if (item.attribute_code === 'dc_only') productData.dc_only = item.value;
+
+      if (item.attribute_code === 'safety_stock_level')
+        productData.safety_stock_level = item.value;
+
+      if (item.attribute_code === 'nahdi_rewards_factor')
+        productData.nahdi_rewards_factor = item.value;
+      return;
+    });
+
+    this.setState({ productData: productData });
   };
 
   setQty = val => {
@@ -243,10 +139,12 @@ class ProductDescriptionPage extends React.Component {
     });
   }
 
+  componentDidMount = async () => {
+    this.fetchProducts();
+  };
+
   render() {
     const { navigation } = this.props;
-
-    this.fetchProducts(this.state.sku);
 
     const toggleOverlay = () => {
       this.setState({
@@ -288,11 +186,7 @@ class ProductDescriptionPage extends React.Component {
     if (!productData.name)
       return (
         <View style={styles.loading}>
-          {/* <ActivityIndicator size="large" color="#278585" /> */}
-          <Image
-            style={{ width: 44, height: 44 }}
-            source={require('../assets/images/nahdi-loading.gif')}
-          />
+          <ActivityIndicator size="large" color="#278585" />
         </View>
       );
 
@@ -322,7 +216,7 @@ class ProductDescriptionPage extends React.Component {
               top: 0,
               left: 330,
               right: 0,
-              bottom: 600,
+              bottom: 400,
               justifyContent: 'center',
               alignItems: 'center',
             }}
@@ -359,7 +253,7 @@ class ProductDescriptionPage extends React.Component {
                 uri: this.state.imageUrl,
               }}
               resizeMode={'contain'}
-              style={{ width: 256, height: 256 }}
+              style={{ width: 256, height: 400 }}
             />
           </TouchableOpacity>
           <View>
@@ -367,7 +261,18 @@ class ProductDescriptionPage extends React.Component {
               numberOfLines={1}
               ellipsizeMode="tail"
               style={{
-                textAlign: 'center',
+                textAlign: 'justify',
+                color: '#278585',
+                fontSize: 12,
+              }}
+            >
+              {productData.manufacturer}
+            </Text>
+            <Text
+              numberOfLines={1}
+              ellipsizeMode="tail"
+              style={{
+                textAlign: 'justify',
                 color: '#278585',
                 fontSize: 18,
                 paddingVertical: 15,
@@ -377,12 +282,51 @@ class ProductDescriptionPage extends React.Component {
             </Text>
             <Text
               style={{
-                textAlign: 'center',
-                fontSize: 20,
+                textAlign: 'justify',
+                fontSize: 16,
                 color: '#90A4AE',
               }}
             >
-              {productData.price.toFixed(2)} SAR
+              SAR{'  '}
+              <Text
+                style={{
+                  fontSize: 22,
+                  fontWeight: 'bold',
+                  color: '#000',
+                }}
+              >
+                {productData.price.toFixed(2)}
+              </Text>
+              {'   '}
+              <Text
+                style={{
+                  fontSize: 8,
+                  textDecorationLine: 'line-through',
+                  textDecorationStyle: 'solid',
+                  color: '#90A4AE',
+                }}
+              >
+                SAR{' '}
+              </Text>
+              <Text
+                style={{
+                  fontSize: 14,
+                  textDecorationLine: 'line-through',
+                  textDecorationStyle: 'solid',
+                  color: '#90A4AE',
+                }}
+              >
+                {productData.price.toFixed(2)}
+              </Text>
+              {'                        '}
+              <Text
+                style={{
+                  fontSize: 14,
+                  color: '#90A4AE',
+                }}
+              >
+                {`(Inclusive of VAT)`}
+              </Text>
             </Text>
             <Text
               style={{
@@ -480,172 +424,15 @@ class ProductDescriptionPage extends React.Component {
             >
               Related Products
             </Text>
-            {productData.relatedProducts.length === 2 ? (
-              <View>
-                <View>
-                  {
-                    <View
-                      style={{ flexDirection: 'row', alignItems: 'center' }}
-                    >
-                      <TouchableOpacity
-                        style={{ width: 180 }}
-                        onPress={() => {
-                          setWebViewUrl(
-                            `https://mcstaging.nahdionline.com/en/${productData.relatedProducts[0].url_key}`
-                          );
-                          toggleOverlay();
-                        }}
-                      >
-                        <Card>
-                          <Card.Title
-                            numberOfLines={1}
-                            ellipsizeMode="tail"
-                            style={{
-                              color: '#278585',
-                              fontSize: 10,
-                            }}
-                          >
-                            {productData.relatedProducts[0].name}
-                          </Card.Title>
-                          <Card.Divider />
-                          <View
-                            style={{
-                              justifyContent: 'center',
-                              alignItems: 'center',
-                            }}
-                          >
-                            <Image
-                              source={{
-                                uri: `https://nahdionline.com/media/catalog/product${productData.relatedProducts[0].image}`,
-                              }}
-                              style={{ width: 92, height: 92 }}
-                              resizeMode={'contain'}
-                            />
-                            <Text
-                              style={{
-                                textAlign: 'center',
-                                fontSize: 12,
-                                paddingVertical: 15,
-                                color: '#90A4AE',
-                              }}
-                            >
-                              {productData.relatedProducts[0].price} SAR
-                            </Text>
-                          </View>
-                        </Card>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        style={{ width: 180 }}
-                        onPress={() => {
-                          setWebViewUrl(
-                            `https://mcstaging.nahdionline.com/en/${productData.relatedProducts[1].url_key}`
-                          );
-                          toggleOverlay();
-                        }}
-                      >
-                        <Card>
-                          <Card.Title
-                            numberOfLines={1}
-                            ellipsizeMode="tail"
-                            style={{
-                              color: '#278585',
-                              fontSize: 10,
-                            }}
-                          >
-                            {productData.relatedProducts[1].name}
-                          </Card.Title>
-                          <Card.Divider />
-                          <View
-                            style={{
-                              justifyContent: 'center',
-                              alignItems: 'center',
-                            }}
-                          >
-                            <Image
-                              source={{
-                                uri: `https://nahdionline.com/media/catalog/product${productData.relatedProducts[1].image}`,
-                              }}
-                              style={{ width: 92, height: 92 }}
-                              resizeMode={'contain'}
-                            />
-                            <Text
-                              style={{
-                                textAlign: 'center',
-                                fontSize: 12,
-                                paddingVertical: 15,
-                                color: '#90A4AE',
-                              }}
-                            >
-                              {productData.relatedProducts[1].price} SAR
-                            </Text>
-                          </View>
-                        </Card>
-                      </TouchableOpacity>
-                    </View>
-                  }
-                </View>
-              </View>
-            ) : productData.relatedProducts.length === 1 ? (
-              <TouchableOpacity
-                style={{ width: 180 }}
-                onPress={() => {
-                  setWebViewUrl(
-                    `https://mcstaging.nahdionline.com/en/${productData.relatedProducts[0].url_key}`
-                  );
-                  toggleOverlay();
-                }}
-              >
-                <Card>
-                  <Card.Title
-                    numberOfLines={1}
-                    ellipsizeMode="tail"
-                    style={{
-                      color: '#278585',
-                      fontSize: 10,
-                    }}
-                  >
-                    {productData.relatedProducts[0].name}
-                  </Card.Title>
-                  <Card.Divider />
-                  <View
-                    style={{
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <Image
-                      source={{
-                        uri: `https://nahdionline.com/media/catalog/product${productData.relatedProducts[0].image}`,
-                      }}
-                      style={{ width: 92, height: 92 }}
-                      resizeMode={'contain'}
-                    />
-                    <Text
-                      style={{
-                        textAlign: 'center',
-                        fontSize: 12,
-                        paddingVertical: 15,
-                        color: '#90A4AE',
-                      }}
-                    >
-                      {productData.relatedProducts[0].price} SAR
-                    </Text>
-                  </View>
-                </Card>
-              </TouchableOpacity>
-            ) : (
-              <Text
-                style={{
-                  textAlign: 'justify',
-                  color: '#90A4AE',
-                  fontSize: 12,
-                  paddingVertical: 20,
-                  paddingHorizontal: 5,
-                }}
-              >
-                No related products found.
-              </Text>
-            )}
+            <Text
+              style={{
+                textAlign: 'justify',
+                color: '#90A4AE',
+                fontSize: 12,
+              }}
+            >
+              No related products found
+            </Text>
           </View>
           <View style={{ paddingBottom: 30 }} />
         </ScrollView>
@@ -672,7 +459,16 @@ class ProductDescriptionPage extends React.Component {
             <Text
               style={{
                 textAlign: 'center',
-                fontSize: 22,
+                fontSize: 14,
+                color: '#278585',
+              }}
+            >
+              Qty
+            </Text>
+            <Text
+              style={{
+                textAlign: 'center',
+                fontSize: 18,
                 color: '#278585',
                 fontWeight: 'bold',
               }}
@@ -680,7 +476,6 @@ class ProductDescriptionPage extends React.Component {
               {this.state.quantity}
             </Text>
           </TouchableOpacity>
-
           <TouchableHighlight
             style={{
               width: '85%',
@@ -712,31 +507,6 @@ class ProductDescriptionPage extends React.Component {
           >
             <Icon name="cart-plus" type="font-awesome" color="#fff" size={30} />
           </TouchableHighlight>
-          {/* <TouchableOpacity style={{ width: '8%' }} onPress={this.resetQuantity.bind(this)}>
-            <Icon
-              name="minus"
-              type="font-awesome"
-              color="#FF0000"
-              size={25}
-            />
-          </TouchableOpacity> */}
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <View style={{ width: 100, height: 40 }}>
-            <Icon
-              name="home"
-              type="font-awesome"
-              color="#278585"
-              size={40}
-              onPress={this.incrementQuantity.bind(this)}
-            />
-          </View>
         </View>
       </SafeAreaView>
     );
