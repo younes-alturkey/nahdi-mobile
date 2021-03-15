@@ -53,7 +53,7 @@ class ProductDescriptionPage extends React.Component {
     //     return tokenRes.data;
     //   })
     //   .catch(err => console.log);
-    const authToken = 'mwj7jhxypky6vt8c9435effncj3u0voi';
+    const authToken = '6335rjddsmxjwr3umkw4zbmtcvdcbrqh';
 
     const { sku, imageUrl, key_url, manufacturer } = this.state;
     console.log('Authentication Token: ', authToken);
@@ -68,6 +68,13 @@ class ProductDescriptionPage extends React.Component {
         return response.data;
       })
       .catch(error => {
+        Toast.show({
+          text1: 'Denied',
+          text2: 'Try again later',
+          visibilityTime: 1000,
+          position: 'bottom',
+          bottomOffset: 60,
+        });
         console.log(error);
       });
 

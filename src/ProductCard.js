@@ -90,7 +90,7 @@ class ProductCard extends Component {
               fontSize: 14,
               paddingTop: 15,
               textAlign: 'center',
-              color: '#90A4AE',
+              color: '#000',
             }}
             numberOfLines={1}
             ellipsizeMode="tail"
@@ -100,12 +100,12 @@ class ProductCard extends Component {
           <Text
             style={{
               textAlign: 'center',
-              paddingTop: 15,
-              color: '#90A4AE',
+              paddingTop: 10,
+              color: '#000',
               fontSize: 16,
             }}
           >
-            SAR{'   '}
+            SAR{'  '}
             <Text
               style={{
                 textAlign: 'center',

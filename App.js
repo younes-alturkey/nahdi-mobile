@@ -20,6 +20,7 @@ import CartIcon from './src/CartIcon';
 import CartScreen from './src/CartScreen';
 import SearchIcon from './src/SearchIcon';
 import HomeIcon from './src/HomeIcon';
+import axios from 'axios';
 
 LogBox.ignoreLogs(['Setting a timer']);
 
@@ -42,11 +43,56 @@ const toastConfig = {
   ),
 };
 
+const getCartId = async () => {
+  const cartId = await axios
+    .post(`https://mcstaging.nahdionline.com/en/rest/all/V1/guest-carts`, {
+      headers: {
+        Accept: 'application/json',
+      },
+    })
+    .then(response => {
+      return response.data;
+    })
+    .catch(error => {
+      Toast.show({
+        text1: 'Denied',
+        text2: 'Could not create a cart Id',
+        visibilityTime: 1000,
+        position: 'bottom',
+        bottomOffset: 60,
+      });
+      console.log(error);
+    });
+};
+
+// const getCartDetails = async (cartId) => {
+//   const cartDetails = await axios
+//     .get(`https://mcstaging.nahdionline.com/en/rest/all/V1/guest-carts/${cartId}`)
+//     .then(response => {
+//       return response.data;
+//     })
+//     .catch(error => {
+//       Toast.show({
+//         text1: 'Denied',
+//         text2: 'Could not create a cart Id',
+//         visibilityTime: 1000,
+//         position: 'bottom',
+//         bottomOffset: 60,
+//       });
+//       console.log(error);
+//     });
+// };
+
 let cart = {
   qty: 0,
   indices: 0,
   total: 0,
   products: [],
+  cartId: '',
+};
+
+const Home = () => {
+  return <HomeScreen cart={cart} />;
 };
 
 const PLP = () => {
@@ -68,7 +114,7 @@ class App extends React.Component {
         <Stack.Navigator>
           <Stack.Screen
             name="HomeScreen"
-            component={HomeScreen}
+            component={Home}
             options={{
               headerTitleStyle: {},
               headerStyle: {
