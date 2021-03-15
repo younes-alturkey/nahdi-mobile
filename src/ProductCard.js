@@ -51,6 +51,7 @@ class ProductCard extends Component {
     const imageUrl =
       'https://' + item.image_url.substring(2, item.image_url.length);
     const url = item.url;
+    const isNew = item.redbox_pl ? true : false;
 
     return (
       <TouchableOpacity
@@ -67,7 +68,7 @@ class ProductCard extends Component {
         }}
       >
         <Card containerStyle={styles.card}>
-          <Card.Title
+          {/* <Card.Title
             style={{
               color: '#278585',
               fontSize: 12,
@@ -76,8 +77,8 @@ class ProductCard extends Component {
             ellipsizeMode="tail"
           >
             {item.manufacturer}
-          </Card.Title>
-          <Card.Divider />
+          </Card.Title> */}
+          {/* <Card.Divider /> */}
           <Card.Image
             source={{
               uri: imageUrl,
@@ -86,10 +87,12 @@ class ProductCard extends Component {
           />
           <Text
             style={{
-              fontSize: 18,
+              fontSize: 14,
+              paddingTop: 15,
+              textAlign: 'center',
               color: '#90A4AE',
             }}
-            numberOfLines={2}
+            numberOfLines={1}
             ellipsizeMode="tail"
           >
             {item.name}
@@ -98,19 +101,29 @@ class ProductCard extends Component {
             style={{
               textAlign: 'center',
               paddingTop: 15,
-              color: '#278585',
-              fontSize: 18,
+              color: '#90A4AE',
+              fontSize: 16,
             }}
           >
-            {item.price.SAR.default_formated}
+            SAR{'   '}
+            <Text
+              style={{
+                textAlign: 'center',
+                paddingTop: 15,
+                color: '#000',
+                fontSize: 18,
+              }}
+            >
+              {item.price.SAR.default}
+            </Text>
           </Text>
-          <View style={{ flex: 1, flexDirection: 'row', marginTop: 20 }}>
-            <View style={{ width: 50, height: 50, marginTop: 5 }}>
+          <View style={{ flex: 1, flexDirection: 'row', marginTop: 14 }}>
+            <View style={{ width: 50, height: 50, marginTop: 3 }}>
               <Icon
-                name="minus"
+                name="arrow-down"
                 type="font-awesome"
                 color="#278585"
-                size={25}
+                size={23}
                 onPress={this.decrementQuantity.bind(this)}
               />
             </View>
@@ -118,7 +131,7 @@ class ProductCard extends Component {
               <Text
                 style={{
                   textAlign: 'center',
-                  fontSize: 24,
+                  fontSize: 18,
                   color: '#278585',
                   fontWeight: 'bold',
                   borderColor: '#278585',
@@ -128,12 +141,12 @@ class ProductCard extends Component {
                 {this.state.quantity}
               </Text>
             </View>
-            <View style={{ width: 50, height: 50, marginTop: 5 }}>
+            <View style={{ width: 50, height: 50, marginTop: 3 }}>
               <Icon
-                name="plus"
+                name="arrow-up"
                 type="font-awesome"
                 color="#278585"
-                size={25}
+                size={23}
                 onPress={this.incrementQuantity.bind(this)}
               />
             </View>
@@ -161,17 +174,33 @@ class ProductCard extends Component {
                 ) *
                   this.state.quantity;
               this.resetQuantity();
+              Toast.show({
+                text1: 'Success',
+                text2: 'Added to your cart 🥰',
+                visibilityTime: 1000,
+                position: 'bottom',
+                bottomOffset: 60,
+              });
               navigation.navigate('ProductListPage');
             }}
             style={{ backgroundColor: '#278585' }}
           >
-            <View style={{ padding: 5 }}>
-              <Icon
+            <View
+              style={{
+                padding: 5,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              {/* <Icon
                 name="shopping-cart"
                 type="font-awesome"
                 color="#fff"
                 size={25}
-              />
+              /> */}
+              <Text style={{ color: '#fff', fontSize: 14, fontWeight: 'bold' }}>
+                Add to Cart
+              </Text>
             </View>
           </TouchableHighlight>
         </Card>

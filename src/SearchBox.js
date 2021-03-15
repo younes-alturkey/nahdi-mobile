@@ -30,8 +30,8 @@ SearchBox.propTypes = {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 20,
-    margin: 10,
+    // paddingHorizontal: 20,
+    // margin: 10,
   },
   input: {
     padding: 14,
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     borderColor: '#278585',
     color: '#278585',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 1, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 2,
   },

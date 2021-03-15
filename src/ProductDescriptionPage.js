@@ -53,7 +53,7 @@ class ProductDescriptionPage extends React.Component {
     //     return tokenRes.data;
     //   })
     //   .catch(err => console.log);
-    const authToken = 'z29lzfpatpz1urkxtf71xt1d5mazdfmk';
+    const authToken = 'mwj7jhxypky6vt8c9435effncj3u0voi';
 
     const { sku, imageUrl, key_url, manufacturer } = this.state;
     console.log('Authentication Token: ', authToken);
@@ -299,7 +299,7 @@ class ProductDescriptionPage extends React.Component {
             >
               <View style={{ flexDirection: 'row', marginBottom: 8 }}>
                 <Image
-                  style={{ width: 20, height: 20 }}
+                  style={{ width: 20, height: 20, marginTop: 5 }}
                   source={require('../assets/images/medal.png')}
                 />
                 <Text
@@ -316,7 +316,7 @@ class ProductDescriptionPage extends React.Component {
               </View>
               <View style={{ flexDirection: 'row', marginBottom: 8 }}>
                 <Image
-                  style={{ width: 20, height: 20 }}
+                  style={{ width: 20, height: 20, marginTop: 5 }}
                   source={require('../assets/images/refund.png')}
                 />
                 <Text
@@ -337,13 +337,13 @@ class ProductDescriptionPage extends React.Component {
               </View>
               <View style={{ flexDirection: 'row' }}>
                 <Image
-                  style={{ width: 20, height: 20 }}
+                  style={{ width: 20, height: 20, marginTop: 9 }}
                   source={require('../assets/images/logistics.png')}
                 />
                 <Text
                   style={{
                     paddingHorizontal: 15,
-                    marginTop: 4,
+                    marginTop: 9,
                     fontSize: 12,
                     fontStyle: 'italic',
                     color: '#000',
@@ -364,7 +364,7 @@ class ProductDescriptionPage extends React.Component {
                     until={9000}
                     size={16}
                     showSeparator
-                    separatorStyle={{ paddingBottom: 18 }}
+                    separatorStyle={{ paddingBottom: 24 }}
                   />
                 </View>
               </View>
@@ -422,7 +422,7 @@ class ProductDescriptionPage extends React.Component {
             >
               Supplied by{' '}
               {productData.dc_only === '0'
-                ? 'Distribution Center only'
+                ? 'Distribution Center'
                 : 'Distribution Center and others'}
             </Text>
             <Text
@@ -681,6 +681,13 @@ class ProductDescriptionPage extends React.Component {
                 productData.price * this.state.quantity;
               console.log(this.props.route.params.cart);
               this.resetQuantity();
+              Toast.show({
+                text1: 'Success',
+                text2: 'Added to your cart 🥰',
+                visibilityTime: 1000,
+                position: 'bottom',
+                bottomOffset: 60,
+              });
               navigation.navigate('ProductDescriptionPage');
             }}
           >
