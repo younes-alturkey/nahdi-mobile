@@ -53,7 +53,7 @@ class ProductDescriptionPage extends React.Component {
     //     return tokenRes.data;
     //   })
     //   .catch(err => console.log);
-    const authToken = '6335rjddsmxjwr3umkw4zbmtcvdcbrqh';
+    const authToken = '84ya1mbclp9xcvjsi2ezdfuad9hv0ogg';
 
     const { sku, imageUrl, key_url, manufacturer } = this.state;
     console.log('Authentication Token: ', authToken);
@@ -261,7 +261,7 @@ class ProductDescriptionPage extends React.Component {
                 style={{
                   fontSize: 22,
                   fontWeight: 'bold',
-                  color: '#000',
+                  color: '#278585',
                 }}
               >
                 {productData.price.toFixed(2)}

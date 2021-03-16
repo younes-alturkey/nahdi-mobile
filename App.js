@@ -21,6 +21,7 @@ import CartScreen from './src/CartScreen';
 import SearchIcon from './src/SearchIcon';
 import HomeIcon from './src/HomeIcon';
 import axios from 'axios';
+import CheckOutScreen from './src/CheckOutScreen';
 
 LogBox.ignoreLogs(['Setting a timer']);
 
@@ -65,23 +66,25 @@ const getCartId = async () => {
     });
 };
 
-// const getCartDetails = async (cartId) => {
-//   const cartDetails = await axios
-//     .get(`https://mcstaging.nahdionline.com/en/rest/all/V1/guest-carts/${cartId}`)
-//     .then(response => {
-//       return response.data;
-//     })
-//     .catch(error => {
-//       Toast.show({
-//         text1: 'Denied',
-//         text2: 'Could not create a cart Id',
-//         visibilityTime: 1000,
-//         position: 'bottom',
-//         bottomOffset: 60,
-//       });
-//       console.log(error);
-//     });
-// };
+const getCartDetails = async cartId => {
+  const cartDetails = await axios
+    .get(
+      `https://mcstaging.nahdionline.com/en/rest/all/V1/guest-carts/${cartId}`
+    )
+    .then(response => {
+      return response.data;
+    })
+    .catch(error => {
+      Toast.show({
+        text1: 'Denied',
+        text2: 'Could not create a cart Id',
+        visibilityTime: 1000,
+        position: 'bottom',
+        bottomOffset: 60,
+      });
+      console.log(error);
+    });
+};
 
 let cart = {
   qty: 0,
@@ -105,6 +108,10 @@ const PLP = () => {
 
 const CartView = () => {
   return <CartScreen cart={cart} />;
+};
+
+const COutView = () => {
+  return <CheckOutScreen cart={cart} />;
 };
 
 class App extends React.Component {
@@ -184,6 +191,20 @@ class App extends React.Component {
               },
               headerTintColor: '#fff',
               headerRight: () => <SearchIcon />,
+            })}
+          />
+          <Stack.Screen
+            name="COutView"
+            component={COutView}
+            options={({ route }) => ({
+              title: 'Checkout',
+              headerTintColor: '#278585',
+              headerTitleStyle: {},
+              headerStyle: {
+                backgroundColor: '#278585',
+              },
+              headerTintColor: '#fff',
+              headerRight: () => <HomeIcon />,
             })}
           />
           {/* <Stack.Screen
