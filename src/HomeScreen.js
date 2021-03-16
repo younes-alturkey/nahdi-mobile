@@ -162,7 +162,7 @@ class HomeScreen extends React.Component {
           >
             <Image
               source={require('../assets/images/PinkMobAr.jpg')}
-              style={{ width: 440, height: 100, borderRadius: 10 }}
+              style={{ width: '95%', height: 180, borderRadius: 10 }}
               resizeMode={'contain'}
             />
           </TouchableOpacity>
@@ -172,9 +172,10 @@ class HomeScreen extends React.Component {
             flexDirection: 'row',
             flexWrap: 'wrap',
             paddingTop: 70,
-            paddingLeft: 8,
-            justifyContent: 'space-between',
+            paddingLeft: 12,
+            justifyContent: 'space-evenly',
             alignItems: 'center',
+            width: '95%',
           }}
         >
           <TouchableOpacity

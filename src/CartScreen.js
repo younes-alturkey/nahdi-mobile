@@ -22,25 +22,27 @@ class CartScreen extends React.Component {
       products: this.props.cart.products,
       total: this.props.cart.total.toFixed(2),
       vat: (this.props.cart.total * 0.15).toFixed(2),
-      grand: (this.props.cart.total + (this.props.cart.total * 0.15)).toFixed(2),
+      grand: (this.props.cart.total + this.props.cart.total * 0.15).toFixed(2),
     };
   }
 
   updateCart = (qty, name, price) => {
-    if(this.state.cart.products.length === 1) {
-      this.checkout();
+    if (this.state.cart.products.length === 1) {
+      this.clearCart();
       return;
     }
     const temp = this.state.cart.qty - qty;
     temp < 0 ? (this.state.cart.qty = 0) : (this.state.cart.qty = temp);
 
     let newProducts = [];
-    for(let i = 0; i < this.state.cart.products.length; i++) {
-      if(this.state.cart.products[i].name !== name) {
-        newProducts.push(this.state.cart.products[i])
+    for (let i = 0; i < this.state.cart.products.length; i++) {
+      if (this.state.cart.products[i].name !== name) {
+        newProducts.push(this.state.cart.products[i]);
       }
     }
-    const updatedTotal = this.state.cart.total - (parseFloat(price.replace(/[^0-9, ., ]/g, '').trim()) * qty);
+    const updatedTotal =
+      this.state.cart.total -
+      parseFloat(price.replace(/[^0-9, ., ]/g, '').trim()) * qty;
     this.state.cart.total = updatedTotal < 0 ? 0 : updatedTotal;
     this.state.cart.products = newProducts;
     this.setState({
@@ -51,14 +53,14 @@ class CartScreen extends React.Component {
     });
   };
 
-  checkout = () => {
+  clearCart = () => {
     this.props.cart.qty = 0;
     this.props.cart.indices = 0;
     this.props.cart.total = 0;
     this.props.cart.products = [];
-    this.setState({products: []})
-    this.forceUpdate()
-  }
+    this.setState({ products: [] });
+    this.forceUpdate();
+  };
 
   render() {
     // Get it from props
@@ -96,34 +98,58 @@ class CartScreen extends React.Component {
           showsHorizontalScrollIndicator={false}
         />
         <View style={{ padding: 20 }}>
-          <Text style={{color: '#278585', fontSize: 20}}>Order Summary</Text>
-          <Text stlye={{paddingLeft: 15, fontSize: 16, color: "#90A4AE"}}>Sub Total: {this.state.total}</Text>
-          <Text stlye={{paddingLeft: 15, fontSize: 16, color: "#90A4AE"}}>VAT (15%): {this.state.vat}</Text>
-          <Text stlye={{paddingLeft: 15, fontSize: 16, color: "#90A4AE"}}>Grand Total: {this.state.grand}</Text>
+          <Text style={{ color: '#278585', fontSize: 20 }}>Basket Summary</Text>
+          <Text stlye={{ paddingLeft: 15, fontSize: 16, color: '#90A4AE' }}>
+            Sub Total: {this.state.total}
+          </Text>
+          <Text stlye={{ paddingLeft: 15, fontSize: 16, color: '#90A4AE' }}>
+            VAT (15%): {this.state.vat}
+          </Text>
+          <Text stlye={{ paddingLeft: 15, fontSize: 16, color: '#90A4AE' }}>
+            Grand Total: {this.state.grand}
+          </Text>
         </View>
         <TouchableHighlight
-          style={{ width: '100%', backgroundColor: '#278585' }}
+          style={{
+            width: '100%',
+            height: 50,
+            backgroundColor: '#278585',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
           underlayColor="#90A4AE"
           activeOpacity={0.6}
           onPress={() => {
-            Toast.show({
-              text1: 'Success',
-              text2: `We'll' deliver your order soon and with ❤️.`,
-              visibilityTime: 2000,
-              position: 'bottom',
-              bottomOffset: 60,
-            });
-            this.checkout()
-            // navigation.navigate('CartView')
+            // Toast.show({
+            //   text1: 'Success',
+            //   text2: `We'll' deliver your order soon and with ❤️.`,
+            //   visibilityTime: 2000,
+            //   position: 'bottom',
+            //   bottomOffset: 60,
+            // });
+            // this.clearCart();
+            navigation.navigate('COutView');
           }}
         >
-          <View style={{ padding: 5 }}>
+          <View
+            style={{ flexDirection: 'row', justifyContent: 'space-between' }}
+          >
             <Icon
-              name="credit-card"
+              name="address-card"
               type="font-awesome"
               color="#fff"
               size={30}
             />
+            <Text
+              style={{
+                color: '#fff',
+                fontSize: 22,
+                fontWeight: 'bold',
+                marginLeft: 20,
+              }}
+            >
+              Checkout
+            </Text>
           </View>
         </TouchableHighlight>
       </View>

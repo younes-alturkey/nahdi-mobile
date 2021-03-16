@@ -183,7 +183,7 @@ class App extends React.Component {
             name="CartView"
             component={CartView}
             options={({ route }) => ({
-              title: 'Shopping Cart',
+              title: 'Shopping Basket',
               headerTintColor: '#278585',
               headerTitleStyle: {},
               headerStyle: {

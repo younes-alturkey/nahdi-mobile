@@ -53,7 +53,7 @@ class ProductDescriptionPage extends React.Component {
     //     return tokenRes.data;
     //   })
     //   .catch(err => console.log);
-    const authToken = '84ya1mbclp9xcvjsi2ezdfuad9hv0ogg';
+    const authToken = 'h86u9r0tpsiz4luf4naqilvlbbmajxce';
 
     const { sku, imageUrl, key_url, manufacturer } = this.state;
     console.log('Authentication Token: ', authToken);
@@ -494,7 +494,7 @@ class ProductDescriptionPage extends React.Component {
                   />
                   <Text style={{ fontSize: 10, color: '#000' }}>
                     SAR{' '}
-                    <Text style={{ fontSize: 12, color: '#000' }}>3.85</Text>
+                    <Text style={{ fontSize: 12, color: '#278585' }}>3.85</Text>
                   </Text>
                   <Text style={{ fontSize: 14, color: '#000' }}>
                     Fevadol 500 mg
@@ -530,7 +530,7 @@ class ProductDescriptionPage extends React.Component {
                   />
                   <Text style={{ fontSize: 10, color: '#000' }}>
                     SAR{' '}
-                    <Text style={{ fontSize: 12, color: '#000' }}>10.7</Text>
+                    <Text style={{ fontSize: 12, color: '#278585' }}>10.7</Text>
                   </Text>
                   <Text style={{ fontSize: 14, color: '#000' }}>
                     Panadol Cold+Flu
@@ -565,7 +565,8 @@ class ProductDescriptionPage extends React.Component {
                     resizeMode={'contain'}
                   />
                   <Text style={{ fontSize: 10, color: '#000' }}>
-                    SAR <Text style={{ fontSize: 12, color: '#000' }}>22</Text>
+                    SAR{' '}
+                    <Text style={{ fontSize: 12, color: '#278585' }}>22</Text>
                   </Text>
                   <Text style={{ fontSize: 14, color: '#000' }}>
                     Dove Shower Gel
@@ -600,7 +601,8 @@ class ProductDescriptionPage extends React.Component {
                     resizeMode={'contain'}
                   />
                   <Text style={{ fontSize: 10, color: '#000' }}>
-                    SAR <Text style={{ fontSize: 12, color: '#000' }}>27</Text>
+                    SAR{' '}
+                    <Text style={{ fontSize: 12, color: '#278585' }}>27</Text>
                   </Text>
                   <Text style={{ fontSize: 14, color: '#000' }}>
                     Lightness Baby Tea

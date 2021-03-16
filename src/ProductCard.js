@@ -120,7 +120,7 @@ class ProductCard extends Component {
           <View style={{ flex: 1, flexDirection: 'row', marginTop: 14 }}>
             <View style={{ width: 50, height: 50, marginTop: 3 }}>
               <Icon
-                name="arrow-down"
+                name="minus"
                 type="font-awesome"
                 color="#278585"
                 size={23}
@@ -143,7 +143,7 @@ class ProductCard extends Component {
             </View>
             <View style={{ width: 50, height: 50, marginTop: 3 }}>
               <Icon
-                name="arrow-up"
+                name="plus"
                 type="font-awesome"
                 color="#278585"
                 size={23}
