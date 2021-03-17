@@ -22,6 +22,7 @@ import SearchIcon from './src/SearchIcon';
 import HomeIcon from './src/HomeIcon';
 import axios from 'axios';
 import CheckOutScreen from './src/CheckOutScreen';
+import OrderPlaced from './src/OrderPlaced';
 
 LogBox.ignoreLogs(['Setting a timer']);
 
@@ -42,48 +43,6 @@ const toastConfig = {
       leadingIcon={require('./assets/images/icon.png')}
     />
   ),
-};
-
-const getCartId = async () => {
-  const cartId = await axios
-    .post(`https://mcstaging.nahdionline.com/en/rest/all/V1/guest-carts`, {
-      headers: {
-        Accept: 'application/json',
-      },
-    })
-    .then(response => {
-      return response.data;
-    })
-    .catch(error => {
-      Toast.show({
-        text1: 'Denied',
-        text2: 'Could not create a cart Id',
-        visibilityTime: 1000,
-        position: 'bottom',
-        bottomOffset: 60,
-      });
-      console.log(error);
-    });
-};
-
-const getCartDetails = async cartId => {
-  const cartDetails = await axios
-    .get(
-      `https://mcstaging.nahdionline.com/en/rest/all/V1/guest-carts/${cartId}`
-    )
-    .then(response => {
-      return response.data;
-    })
-    .catch(error => {
-      Toast.show({
-        text1: 'Denied',
-        text2: 'Could not create a cart Id',
-        visibilityTime: 1000,
-        position: 'bottom',
-        bottomOffset: 60,
-      });
-      console.log(error);
-    });
 };
 
 let cart = {
@@ -207,26 +166,20 @@ class App extends React.Component {
               headerRight: () => <HomeIcon />,
             })}
           />
-          {/* <Stack.Screen
-            name="CartScreen"
-            component={CartView}
-            options={({ }) => ({
-              title: 'My Cart',
+          <Stack.Screen
+            name="OrderPlaced"
+            component={OrderPlaced}
+            options={({ route }) => ({
+              title: 'Order Successfully Placed',
               headerTintColor: '#278585',
               headerTitleStyle: {},
               headerStyle: {
                 backgroundColor: '#278585',
               },
               headerTintColor: '#fff',
-              headerRight: () => (
-                <View>
-                  <TouchableOpacity>
-                    <Icon name="search" type="font-awesome" color="#90A4AE" />
-                  </TouchableOpacity>
-                </View>
-              ),
+              headerRight: () => <HomeIcon />,
             })}
-          /> */}
+          />
         </Stack.Navigator>
         <Toast config={toastConfig} ref={ref => Toast.setRef(ref)} />
       </NavigationContainer>

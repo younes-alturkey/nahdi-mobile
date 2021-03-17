@@ -41,19 +41,19 @@ class ProductDescriptionPage extends React.Component {
   }
 
   fetchProducts = async () => {
-    // const authToken = await axios
-    //   .post(
-    //     'https://mcstaging.nahdionline.com/en/rest/V1/integration/admin/token',
-    //     {
-    //       username: 'younes',
-    //       password: 'Nahdi@123',
-    //     }
-    //   )
-    //   .then(tokenRes => {
-    //     return tokenRes.data;
-    //   })
-    //   .catch(err => console.log);
-    const authToken = 'h86u9r0tpsiz4luf4naqilvlbbmajxce';
+    const authToken = await axios
+      .post(
+        'https://mcstaging.nahdionline.com/en/rest/V1/integration/admin/token',
+        {
+          username: 'younes',
+          password: 'Nahdi@123',
+        }
+      )
+      .then(tokenRes => {
+        return tokenRes.data;
+      })
+      .catch(err => console.log);
+    // const authToken = 'v8ijzhqkv203i5supn8rkf7ur8x02v3d';
 
     const { sku, imageUrl, key_url, manufacturer } = this.state;
     console.log('Authentication Token: ', authToken);

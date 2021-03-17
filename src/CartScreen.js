@@ -23,6 +23,8 @@ class CartScreen extends React.Component {
       total: this.props.cart.total.toFixed(2),
       vat: (this.props.cart.total * 0.15).toFixed(2),
       grand: (this.props.cart.total + this.props.cart.total * 0.15).toFixed(2),
+      numOfProducts: this.props.cart.products.length,
+      qty: this.props.cart.qty,
     };
   }
 
@@ -65,7 +67,6 @@ class CartScreen extends React.Component {
   render() {
     // Get it from props
     const { navigation, cart } = this.props;
-    console.log(this.state.products);
 
     if (this.state.cart.qty === 0)
       return (
@@ -99,14 +100,25 @@ class CartScreen extends React.Component {
         />
         <View style={{ padding: 20 }}>
           <Text style={{ color: '#278585', fontSize: 20 }}>Basket Summary</Text>
-          <Text stlye={{ paddingLeft: 15, fontSize: 16, color: '#90A4AE' }}>
-            Sub Total: {this.state.total}
+          <Text
+            style={{
+              paddingLeft: 5,
+              fontSize: 14,
+              fontStyle: 'italic',
+              color: '#90A4AE',
+            }}
+          >
+            Total Items {this.state.numOfProducts}
           </Text>
-          <Text stlye={{ paddingLeft: 15, fontSize: 16, color: '#90A4AE' }}>
-            VAT (15%): {this.state.vat}
-          </Text>
-          <Text stlye={{ paddingLeft: 15, fontSize: 16, color: '#90A4AE' }}>
-            Grand Total: {this.state.grand}
+          <Text
+            style={{
+              paddingLeft: 5,
+              fontSize: 14,
+              fontStyle: 'italic',
+              color: '#90A4AE',
+            }}
+          >
+            Total Quantity {this.state.qty}
           </Text>
         </View>
         <TouchableHighlight
@@ -128,14 +140,14 @@ class CartScreen extends React.Component {
             //   bottomOffset: 60,
             // });
             // this.clearCart();
-            navigation.navigate('COutView');
+            navigation.navigate('COutView', { cart: cart });
           }}
         >
           <View
             style={{ flexDirection: 'row', justifyContent: 'space-between' }}
           >
             <Icon
-              name="address-card"
+              name="credit-card"
               type="font-awesome"
               color="#fff"
               size={30}

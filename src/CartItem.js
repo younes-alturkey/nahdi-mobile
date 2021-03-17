@@ -20,7 +20,6 @@ class CartItem extends Component {
 
   render() {
     const { navigation, product } = this.props;
-    console.log(product.imageUrl);
 
     return (
       <Card style={styles.card}>
@@ -42,7 +41,14 @@ class CartItem extends Component {
             x {product.qty}
           </Text>
 
-          <Text style={{ paddingTop: 30, paddingLeft: 50, color: '#90A4AE' }}>
+          <Text
+            style={{
+              paddingTop: 30,
+              paddingLeft: 50,
+              color: '#278585',
+              fontSize: 16,
+            }}
+          >
             {product.price.length < 9 ? ' ' + product.price : product.price}
           </Text>
           <View style={{ paddingTop: 20, paddingLeft: 85 }}>
