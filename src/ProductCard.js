@@ -68,17 +68,6 @@ class ProductCard extends Component {
         }}
       >
         <Card containerStyle={styles.card}>
-          {/* <Card.Title
-            style={{
-              color: '#278585',
-              fontSize: 12,
-            }}
-            numberOfLines={1}
-            ellipsizeMode="tail"
-          >
-            {item.manufacturer}
-          </Card.Title> */}
-          {/* <Card.Divider /> */}
           <Card.Image
             source={{
               uri: imageUrl,
@@ -90,7 +79,7 @@ class ProductCard extends Component {
               fontSize: 14,
               paddingTop: 15,
               textAlign: 'center',
-              color: '#000',
+              color: '#278585',
             }}
             numberOfLines={1}
             ellipsizeMode="tail"
@@ -100,8 +89,8 @@ class ProductCard extends Component {
           <Text
             style={{
               textAlign: 'center',
-              paddingTop: 10,
-              color: '#000',
+              paddingTop: 9,
+              color: '#90A4AE',
               fontSize: 16,
             }}
           >
@@ -110,7 +99,7 @@ class ProductCard extends Component {
               style={{
                 textAlign: 'center',
                 paddingTop: 15,
-                color: '#000',
+                color: '#278585',
                 fontSize: 18,
               }}
             >
@@ -177,7 +166,7 @@ class ProductCard extends Component {
               Toast.show({
                 text1: 'Success',
                 text2: 'Added to your cart 🥰',
-                visibilityTime: 1000,
+                visibilityTime: 300,
                 position: 'bottom',
                 bottomOffset: 60,
               });
@@ -192,15 +181,15 @@ class ProductCard extends Component {
                 alignItems: 'center',
               }}
             >
-              {/* <Icon
-                name="shopping-cart"
+              <Icon
+                name="cart-plus"
                 type="font-awesome"
                 color="#fff"
                 size={25}
-              /> */}
-              <Text style={{ color: '#fff', fontSize: 14, fontWeight: 'bold' }}>
+              />
+              {/* <Text style={{ color: '#fff', fontSize: 14, fontWeight: 'bold' }}>
                 Add to Cart
-              </Text>
+              </Text> */}
             </View>
           </TouchableHighlight>
         </Card>

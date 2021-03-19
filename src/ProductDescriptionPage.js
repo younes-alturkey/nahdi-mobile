@@ -464,6 +464,12 @@ class ProductDescriptionPage extends React.Component {
                 showsHorizontalScrollIndicator={false}
                 style={{ height: 160 }}
               >
+                {/*sku: item.sku,
+            name: item.name,
+            imageUrl: imageUrl,
+            url: url,
+            manufacturer: item.manufacturer,
+            cart: this.props.cart, */}
                 <TouchableOpacity
                   style={{
                     width: 150,
@@ -475,12 +481,12 @@ class ProductDescriptionPage extends React.Component {
                     navigation.navigate('HomeScreen');
                     navigation.navigate('ProductDescriptionPage', {
                       sku: '100015816',
-                      name: 'Fevadol 500 mg Tablet 20pcs',
                       imageUrl:
                         'https://nahdionline.com/media/catalog/product/1/0/100015816-01.jpg',
                       url: 'fevadol-500-mg-tablet-20pcs',
                       manufacturer: 'Fevadol',
                       cart: this.props.cart,
+                      name: 'Fevadol 500 mg Tablet 20pcs',
                     });
                   }}
                 >
@@ -693,7 +699,7 @@ class ProductDescriptionPage extends React.Component {
               Toast.show({
                 text1: 'Success',
                 text2: 'Added to your cart 🥰',
-                visibilityTime: 1000,
+                visibilityTime: 300,
                 position: 'bottom',
                 bottomOffset: 60,
               });

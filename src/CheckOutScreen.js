@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Text,
   View,
@@ -6,19 +6,17 @@ import {
   StyleSheet,
   TextInput,
   TouchableHighlight,
-  Icon,
   Image,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { Icon } from 'react-native-elements';
 import axios from 'axios';
 import CountDown from 'react-native-countdown-component';
 import Toast from 'react-native-toast-message';
+import { TouchableOpacity } from 'react-native';
 
 export const CheckOutScreen = props => {
-  const [grandTotal, setGrandTotal] = useState(0);
-  const [baseGrandTotal, setBaseGrandTotal] = useState(0);
-  const [taxAmount, setTaxAmount] = useState(0);
-  const [nuhdeekPoints, setNuhdeekPoints] = useState(0);
+  const [orderDetails, setOrderDetails] = useState({});
 
   const { navigation } = props;
 
@@ -54,7 +52,6 @@ export const CheckOutScreen = props => {
               }
             )
             .then(productRes => {
-              console.log(i, ': ', productRes.data);
               return;
             })
             .catch(error => {
@@ -69,42 +66,56 @@ export const CheckOutScreen = props => {
             });
         }
 
-        axios
-          .get(
-            `https://mcstaging.nahdionline.com/en/rest/all/V1/guest-carts/${cartId}/totals`
-          )
-          .then(totalsRes => {
-            setGrandTotal(totalsRes.data.grand_total);
-            setBaseGrandTotal(totalsRes.data.base_grand_total);
-            setTaxAmount(totalsRes.data.tax_amount);
-            setNuhdeekPoints(totalsRes.data.total_segments[5].value);
-            return;
-          })
-          .catch(err => {
-            Toast.show({
-              text1: 'Denied',
-              text2: 'Could not get Magento cart total',
-              visibilityTime: 1000,
-              position: 'bottom',
-              bottomOffset: 60,
+        setTimeout(() => {
+          axios
+            .get(
+              `https://mcstaging.nahdionline.com/en/rest/all/V1/guest-carts/${cartId}/totals`
+            )
+            .then(totalsRes => {
+              const totals = {
+                grand_total: totalsRes.data.grand_total,
+                base_grand_total: totalsRes.data.base_grand_total,
+                tax_amount: totalsRes.data.tax_amount,
+                nuhdeek: totalsRes.data.total_segments[5].value,
+              };
+              setOrderDetails(totals);
+              return;
+            })
+            .catch(err => {
+              Toast.show({
+                text1: 'Denied',
+                text2: 'Could not get Magento cart total',
+                visibilityTime: 1000,
+                position: 'bottom',
+                bottomOffset: 60,
+              });
+              console.log(err);
             });
-            console.log(err);
-          });
+        }, 700);
         return;
       })
       .catch(error => {
-        Toast.show({
-          text1: 'Denied',
-          text2: 'Could not create a cart Id',
-          visibilityTime: 1000,
-          position: 'bottom',
-          bottomOffset: 60,
-        });
         console.log(error);
       });
   };
 
-  if (grandTotal === 0) postProducts();
+  if (!orderDetails.grand_total) {
+    postProducts();
+    setTimeout(() => {
+      Toast.show({
+        text1: 'Guaranteed',
+        text2: 'Place your order now and delivery will be on time 😉.',
+        visibilityTime: 2000,
+        position: 'bottom',
+        bottomOffset: 60,
+      });
+    }, 4000);
+    return (
+      <View style={styles.loading}>
+        <ActivityIndicator size="large" color="#278585" />
+      </View>
+    );
+  }
 
   return (
     <View
@@ -126,11 +137,13 @@ export const CheckOutScreen = props => {
         Guaranteed On-Time Delivery
       </Text>
       <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-        <Image
-          style={{ width: 150, height: 150 }}
-          resizeMode={'contain'}
-          source={require('../assets/images/guaranteed-delivery.png')}
-        />
+        <TouchableOpacity>
+          <Image
+            style={{ width: 150, height: 150 }}
+            resizeMode={'contain'}
+            source={require('../assets/images/guaranteed-delivery.png')}
+          />
+        </TouchableOpacity>
         <CountDown
           digitStyle={{ backgroundColor: '#fff' }}
           digitTxtStyle={{
@@ -232,19 +245,28 @@ export const CheckOutScreen = props => {
       </Text>
       <View style={{ paddingVertical: 8, paddingHorizontal: 12 }}>
         <Text style={{ fontSize: 18, paddingHorizontal: 5, color: '#90A4AE' }}>
-          Sub Total: {grandTotal === 0 ? 'calculating...' : 'SAR ' + grandTotal}
+          Sub Total: {orderDetails.grand_total}{' '}
+          <Text
+            style={{ fontSize: 12, paddingHorizontal: 5, color: '#90A4AE' }}
+          >
+            SAR
+          </Text>
         </Text>
         <Text style={{ fontSize: 18, paddingHorizontal: 5, color: '#90A4AE' }}>
-          VAT {'(15%)'}:{' '}
-          {taxAmount === 0 ? 'calculating...' : 'SAR ' + taxAmount}
+          VAT {'(15%)'}: {orderDetails.tax_amount}{' '}
+          <Text
+            style={{ fontSize: 12, paddingHorizontal: 5, color: '#90A4AE' }}
+          >
+            SAR
+          </Text>
         </Text>
         <Text style={{ fontSize: 18, paddingHorizontal: 5, color: '#90A4AE' }}>
-          Nuhdeek Points:{' '}
-          {nuhdeekPoints === 0
-            ? 'calculating...'
-            : nuhdeekPoints === null
-            ? 0
-            : nuhdeekPoints}
+          Nuhdeek Rewards: {orderDetails.nuhdeek}{' '}
+          <Text
+            style={{ fontSize: 12, paddingHorizontal: 5, color: '#90A4AE' }}
+          >
+            pts
+          </Text>
         </Text>
         <Text
           style={{
@@ -254,8 +276,12 @@ export const CheckOutScreen = props => {
             fontWeight: 'bold',
           }}
         >
-          Total:{' '}
-          {baseGrandTotal === 0 ? 'calculating...' : 'SAR ' + baseGrandTotal}
+          Total: {orderDetails.base_grand_total}{' '}
+          <Text
+            style={{ fontSize: 14, paddingHorizontal: 5, color: '#278585' }}
+          >
+            SAR
+          </Text>
         </Text>
       </View>
       <TouchableHighlight
@@ -276,11 +302,13 @@ export const CheckOutScreen = props => {
         }}
       >
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Icon name="check" type="font-awesome" color="#fff" size={30} />
           <Text
             style={{
               color: '#fff',
               fontSize: 22,
               fontWeight: 'bold',
+              paddingLeft: 15,
             }}
           >
             Place Order

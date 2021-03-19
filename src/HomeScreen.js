@@ -27,10 +27,10 @@ class HomeScreen extends React.Component {
       webViewUrl: 'https://www.nahdionline.com/en/',
       images: [
         require('../assets/images/featured1.jpg'),
-        require('../assets/images/featured2.jpg'),
+        require('../assets/images/featured2.gif'),
         require('../assets/images/featured3.jpg'),
         require('../assets/images/featured4.jpg'),
-        require('../assets/images/featured5.jpg'),
+        require('../assets/images/featured5.gif'),
         require('../assets/images/featured6.jpg'),
         require('../assets/images/featured7.jpg'),
       ],

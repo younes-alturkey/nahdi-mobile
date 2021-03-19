@@ -1,14 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import {
-  Text,
-  View,
-  ActivityIndicator,
-  StyleSheet,
-  TextInput,
-  TouchableHighlight,
-  Icon,
-  Image,
-} from 'react-native';
+import React, { useEffect } from 'react';
+import { Text, View, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 export const OrderPlaced = props => {
@@ -17,8 +8,9 @@ export const OrderPlaced = props => {
   useEffect(() => {
     setTimeout(() => {
       navigation.navigate('HomeScreen');
-    }, 2000);
+    }, 3000);
   });
+
   return (
     <View
       style={{
@@ -31,8 +23,18 @@ export const OrderPlaced = props => {
       <Image
         style={{ width: 150, height: 150 }}
         resizeMode={'contain'}
-        source={require('../assets/images/order-placed.png')}
+        source={require('../assets/images/order-placed.gif')}
       />
+      <Text
+        style={{
+          paddingVertical: 12,
+          fontSize: 20,
+          color: '#278585',
+          fontWeight: 'bold',
+        }}
+      >
+        There for every beat.
+      </Text>
     </View>
   );
 };
