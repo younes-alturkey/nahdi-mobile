@@ -1,19 +1,13 @@
-# nahdi-mobile-rn-algolia
+# Live Demo
 
-_This project was generated with [create-instantsearch-app](https://github.com/algolia/create-instantsearch-app) by [Algolia](https://algolia.com)._
+![Alt Text](https://media.giphy.com/media/vFKqnCdLPNOKc/giphy.gif)
 
-## Get started
+# Nahdi Mobile with React Native
 
-To run this project locally, install the dependencies and run the local server:
+A Proof of Concept E-commerce mobile app built using React Native and a replica of current Nahdi mobile app.
 
-```sh
-npm install
-npm start
-```
+The App comes integrated and connected with Aloglia.
 
-Alternatively, you may use [Yarn](https://http://yarnpkg.com/):
+# Credits
 
-```sh
-yarn
-yarn start
-```
+Built under the supervison of Director Aiman Alsaggaf Developed by Younes Alturkey
