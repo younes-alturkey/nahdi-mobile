@@ -8,6 +8,14 @@ A Proof of Concept E-commerce mobile app built using React Native. A replica of 
 
 The App comes integrated and connected with Aloglia APIs.
 
-# Credits
+# Supervison By
 
-Built under the supervison of Nahdi IT Retail Director Aiman Alsaggaf Developed by Younes Alturkey +966 53 865 4514 hi@younesalturkey.sa
+Nahdi IT Retail Director Aiman Alsaggaf
+
+# Developed By
+
+<ul>
+<li>Younes Alturkey</li>
+<li>+966 53 865 4514</li>
+<li>hi@younesalturkey.sa</li>
+</ul>
