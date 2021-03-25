@@ -9,7 +9,7 @@
 <ul>
 <li>Fully custom Proof of Concept E-commerce mobile app</li>
 <li>Built using React Native & Expo</li>
-<li>Integrated and connected with Aloglia and Magento APIs</li>
+<li>Integrated and connected with Algolia and Magento APIs</li>
 <li>Replica of current Nahdi mobile app</li>
 </ul>
 
