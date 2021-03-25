@@ -4,13 +4,16 @@
 
 # Nahdi Mobile with React Native
 
-Fully custom Proof of Concept E-commerce mobile app built using React Native. A replica of current Nahdi mobile app.
-
-The App comes integrated and connected with Aloglia and Magento APIs.
+<ul>
+<li>Fully custom Proof of Concept E-commerce mobile app built using React Native. A replica of current Nahdi mobile app</li>
+<li>The App comes integrated and connected with Aloglia and Magento APIs</li>
+</ul>
 
 # Supervison By
 
-Nahdi IT Retail Director Aiman Alsaggaf
+<ul>
+<li>Nahdi IT Retail Director Aiman Alsaggaf</li>
+</ul>
 
 # Developed By
 
