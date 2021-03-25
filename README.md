@@ -4,7 +4,7 @@
 
 # Nahdi Mobile with React Native
 
-![Logo](https://github.com/younes-alturkey/nahdi-mobile-rn-algolia/blob/master/logo.png)
+![Logo](https://github.com/younes-alturkey/nahdi-mobile-rn-algolia/blob/master/nahdi-logo.png)
 
 <ul>
 <li>Fully custom Proof of Concept E-commerce mobile app</li>
