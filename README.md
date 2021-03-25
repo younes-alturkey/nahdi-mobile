@@ -16,7 +16,9 @@
 # Supervison By
 
 <ul>
-<li>Nahdi IT Retail Director Aiman Alsaggaf</li>
+<li>Director Aiman Alsaggaf</li>
+<li>Eng Hamdin Bisharah</li>
+<li>Eng Mahmoud Ismaeel</li>
 </ul>
 
 # Developed By
