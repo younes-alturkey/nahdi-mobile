@@ -1,6 +1,6 @@
 # Live Demo
 
-![Live Demo](https://github.com/younes-alturkey/nahdi-mobile-rn-algolia/blob/master/demo.gif)
+<img src="https://github.com/younes-alturkey/nahdi-mobile-rn-algolia/blob/master/demo.gif" height="600" alt="demo"/>
 
 # Nahdi Mobile with React Native
 
